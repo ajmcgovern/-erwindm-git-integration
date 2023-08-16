@@ -2414,13 +2414,13 @@ ALTER TABLE [BusinessEntityAddress]
 go
 
 ALTER TABLE [BusinessEntityAddress] WITH CHECK 
-	ADD CONSTRAINT [FK_Person.AddressType_Person.B] FOREIGN KEY ([AddressTypeID]) REFERENCES [AddressType]([AddressTypeID])
+	ADD CONSTRAINT [FK_AddressType_BusinessEntityA] FOREIGN KEY ([AddressTypeID]) REFERENCES [AddressType]([AddressTypeID])
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 go
 
 ALTER TABLE [BusinessEntityAddress]
-	  WITH CHECK CHECK CONSTRAINT [FK_Person.AddressType_Person.B]
+	  WITH CHECK CHECK CONSTRAINT [FK_AddressType_BusinessEntityA]
 go
 
 ALTER TABLE [BusinessEntityAddress] WITH CHECK 
@@ -2466,13 +2466,13 @@ go
 
 
 ALTER TABLE [CountryRegionCurrency] WITH CHECK 
-	ADD CONSTRAINT [FK_Person.CountryRegion_Sales.] FOREIGN KEY ([CountryRegionCode]) REFERENCES [CountryRegion]([CountryRegionCode])
+	ADD CONSTRAINT [FK_CountryRegion_CountryRegion] FOREIGN KEY ([CountryRegionCode]) REFERENCES [CountryRegion]([CountryRegionCode])
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 go
 
 ALTER TABLE [CountryRegionCurrency]
-	  WITH CHECK CHECK CONSTRAINT [FK_Person.CountryRegion_Sales.]
+	  WITH CHECK CHECK CONSTRAINT [FK_CountryRegion_CountryRegion]
 go
 
 ALTER TABLE [CountryRegionCurrency] WITH CHECK 
@@ -2839,13 +2839,13 @@ go
 
 
 ALTER TABLE [ProductModelProductDescription] WITH CHECK 
-	ADD CONSTRAINT [FK_Production.ProductDescripti] FOREIGN KEY ([ProductDescriptionID]) REFERENCES [ProductDescription]([ProductDescriptionID])
+	ADD CONSTRAINT [FK_ProductDescription_ProductM] FOREIGN KEY ([ProductDescriptionID]) REFERENCES [ProductDescription]([ProductDescriptionID])
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 go
 
 ALTER TABLE [ProductModelProductDescription]
-	  WITH CHECK CHECK CONSTRAINT [FK_Production.ProductDescripti]
+	  WITH CHECK CHECK CONSTRAINT [FK_ProductDescription_ProductM]
 go
 
 ALTER TABLE [ProductModelProductDescription] WITH CHECK 
@@ -3179,13 +3179,13 @@ go
 
 
 ALTER TABLE [SalesTerritory] WITH CHECK 
-	ADD CONSTRAINT [FK_Person.CountryRegion_Sales.] FOREIGN KEY ([CountryRegionCode]) REFERENCES [CountryRegion]([CountryRegionCode])
+	ADD CONSTRAINT [FK_CountryRegion_SalesTerritor] FOREIGN KEY ([CountryRegionCode]) REFERENCES [CountryRegion]([CountryRegionCode])
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 go
 
 ALTER TABLE [SalesTerritory]
-	  WITH CHECK CHECK CONSTRAINT [FK_Person.CountryRegion_Sales.]
+	  WITH CHECK CHECK CONSTRAINT [FK_CountryRegion_SalesTerritor]
 go
 
 
@@ -3255,13 +3255,13 @@ go
 
 
 ALTER TABLE [StateProvince] WITH CHECK 
-	ADD CONSTRAINT [FK_Person.CountryRegion_Person] FOREIGN KEY ([CountryRegionCode]) REFERENCES [CountryRegion]([CountryRegionCode])
+	ADD CONSTRAINT [FK_CountryRegion_StateProvince] FOREIGN KEY ([CountryRegionCode]) REFERENCES [CountryRegion]([CountryRegionCode])
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 go
 
 ALTER TABLE [StateProvince]
-	  WITH CHECK CHECK CONSTRAINT [FK_Person.CountryRegion_Person]
+	  WITH CHECK CHECK CONSTRAINT [FK_CountryRegion_StateProvince]
 go
 
 ALTER TABLE [StateProvince] WITH CHECK 
@@ -3610,10 +3610,10 @@ BEGIN
            @errmsg  varchar(255)
     /* erwin Builtin Trigger */
     /* Person.AddressType  Person.BusinessEntityAddress on parent delete no action */
-    /* ERWIN_RELATION:CHECKSUM="00015079", PARENT_OWNER="Person", PARENT_TABLE="AddressType"
+    /* ERWIN_RELATION:CHECKSUM="00016735", PARENT_OWNER="Person", PARENT_TABLE="AddressType"
     CHILD_OWNER="Person", CHILD_TABLE="BusinessEntityAddress"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="FK_Person.AddressType_Person.B", FK_COLUMNS="AddressTypeID" */
+    FK_CONSTRAINT="FK_AddressType_BusinessEntityA", FK_COLUMNS="AddressTypeID" */
     IF EXISTS (
       SELECT * FROM deleted,Person.BusinessEntityAddress
       WHERE
@@ -3657,10 +3657,10 @@ BEGIN
   SELECT @numrows = @@rowcount
   /* erwin Builtin Trigger */
   /* Person.AddressType  Person.BusinessEntityAddress on parent update no action */
-  /* ERWIN_RELATION:CHECKSUM="0001784b", PARENT_OWNER="Person", PARENT_TABLE="AddressType"
+  /* ERWIN_RELATION:CHECKSUM="000179d1", PARENT_OWNER="Person", PARENT_TABLE="AddressType"
     CHILD_OWNER="Person", CHILD_TABLE="BusinessEntityAddress"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="FK_Person.AddressType_Person.B", FK_COLUMNS="AddressTypeID" */
+    FK_CONSTRAINT="FK_AddressType_BusinessEntityA", FK_COLUMNS="AddressTypeID" */
   IF
     /* %ParentPK(" OR",UPDATE) */
     UPDATE(AddressTypeID)
@@ -4160,7 +4160,7 @@ BEGIN
            @errmsg  varchar(255)
     /* erwin Builtin Trigger */
     /* Person.BusinessEntity  Person.BusinessEntityAddress on child delete no action */
-    /* ERWIN_RELATION:CHECKSUM="0004f250", PARENT_OWNER="Person", PARENT_TABLE="BusinessEntity"
+    /* ERWIN_RELATION:CHECKSUM="0004e356", PARENT_OWNER="Person", PARENT_TABLE="BusinessEntity"
     CHILD_OWNER="Person", CHILD_TABLE="BusinessEntityAddress"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="FK_Person.BusinessEntity_Perso", FK_COLUMNS="BusinessEntityID" */
@@ -4186,7 +4186,7 @@ BEGIN
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="Person", PARENT_TABLE="AddressType"
     CHILD_OWNER="Person", CHILD_TABLE="BusinessEntityAddress"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="FK_Person.AddressType_Person.B", FK_COLUMNS="AddressTypeID" */
+    FK_CONSTRAINT="FK_AddressType_BusinessEntityA", FK_COLUMNS="AddressTypeID" */
     IF EXISTS (SELECT * FROM deleted,Person.AddressType
       WHERE
         /* %JoinFKPK(deleted,Person.AddressType," = "," AND") */
@@ -4260,7 +4260,7 @@ BEGIN
   SELECT @numrows = @@rowcount
   /* erwin Builtin Trigger */
   /* Person.BusinessEntity  Person.BusinessEntityAddress on child update no action */
-  /* ERWIN_RELATION:CHECKSUM="0004c8f5", PARENT_OWNER="Person", PARENT_TABLE="BusinessEntity"
+  /* ERWIN_RELATION:CHECKSUM="0004db25", PARENT_OWNER="Person", PARENT_TABLE="BusinessEntity"
     CHILD_OWNER="Person", CHILD_TABLE="BusinessEntityAddress"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="FK_Person.BusinessEntity_Perso", FK_COLUMNS="BusinessEntityID" */
@@ -4289,7 +4289,7 @@ BEGIN
   /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="Person", PARENT_TABLE="AddressType"
     CHILD_OWNER="Person", CHILD_TABLE="BusinessEntityAddress"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="FK_Person.AddressType_Person.B", FK_COLUMNS="AddressTypeID" */
+    FK_CONSTRAINT="FK_AddressType_BusinessEntityA", FK_COLUMNS="AddressTypeID" */
   IF
     /* %ChildFK(" OR",UPDATE) */
     UPDATE(AddressTypeID)
@@ -4655,10 +4655,10 @@ BEGIN
            @errmsg  varchar(255)
     /* erwin Builtin Trigger */
     /* Person.CountryRegion  Person.StateProvince on parent delete no action */
-    /* ERWIN_RELATION:CHECKSUM="0003dd36", PARENT_OWNER="Person", PARENT_TABLE="CountryRegion"
+    /* ERWIN_RELATION:CHECKSUM="0003cbd8", PARENT_OWNER="Person", PARENT_TABLE="CountryRegion"
     CHILD_OWNER="Person", CHILD_TABLE="StateProvince"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="FK_Person.CountryRegion_Person", FK_COLUMNS="CountryRegionCode" */
+    FK_CONSTRAINT="FK_CountryRegion_StateProvince", FK_COLUMNS="CountryRegionCode" */
     IF EXISTS (
       SELECT * FROM deleted,Person.StateProvince
       WHERE
@@ -4676,7 +4676,7 @@ BEGIN
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="Person", PARENT_TABLE="CountryRegion"
     CHILD_OWNER="Sales", CHILD_TABLE="SalesTerritory"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="FK_Person.CountryRegion_Sales.", FK_COLUMNS="CountryRegionCode" */
+    FK_CONSTRAINT="FK_CountryRegion_SalesTerritor", FK_COLUMNS="CountryRegionCode" */
     IF EXISTS (
       SELECT * FROM deleted,Sales.SalesTerritory
       WHERE
@@ -4694,7 +4694,7 @@ BEGIN
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="Person", PARENT_TABLE="CountryRegion"
     CHILD_OWNER="Sales", CHILD_TABLE="CountryRegionCurrency"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="FK_Person.CountryRegion_Sales.", FK_COLUMNS="CountryRegionCode" */
+    FK_CONSTRAINT="FK_CountryRegion_CountryRegion", FK_COLUMNS="CountryRegionCode" */
     IF EXISTS (
       SELECT * FROM deleted,Sales.CountryRegionCurrency
       WHERE
@@ -4738,10 +4738,10 @@ BEGIN
   SELECT @numrows = @@rowcount
   /* erwin Builtin Trigger */
   /* Person.CountryRegion  Person.StateProvince on parent update no action */
-  /* ERWIN_RELATION:CHECKSUM="00043a9e", PARENT_OWNER="Person", PARENT_TABLE="CountryRegion"
+  /* ERWIN_RELATION:CHECKSUM="000425fd", PARENT_OWNER="Person", PARENT_TABLE="CountryRegion"
     CHILD_OWNER="Person", CHILD_TABLE="StateProvince"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="FK_Person.CountryRegion_Person", FK_COLUMNS="CountryRegionCode" */
+    FK_CONSTRAINT="FK_CountryRegion_StateProvince", FK_COLUMNS="CountryRegionCode" */
   IF
     /* %ParentPK(" OR",UPDATE) */
     UPDATE(CountryRegionCode)
@@ -4764,7 +4764,7 @@ BEGIN
   /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="Person", PARENT_TABLE="CountryRegion"
     CHILD_OWNER="Sales", CHILD_TABLE="SalesTerritory"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="FK_Person.CountryRegion_Sales.", FK_COLUMNS="CountryRegionCode" */
+    FK_CONSTRAINT="FK_CountryRegion_SalesTerritor", FK_COLUMNS="CountryRegionCode" */
   IF
     /* %ParentPK(" OR",UPDATE) */
     UPDATE(CountryRegionCode)
@@ -4787,7 +4787,7 @@ BEGIN
   /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="Person", PARENT_TABLE="CountryRegion"
     CHILD_OWNER="Sales", CHILD_TABLE="CountryRegionCurrency"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="FK_Person.CountryRegion_Sales.", FK_COLUMNS="CountryRegionCode" */
+    FK_CONSTRAINT="FK_CountryRegion_CountryRegion", FK_COLUMNS="CountryRegionCode" */
   IF
     /* %ParentPK(" OR",UPDATE) */
     UPDATE(CountryRegionCode)
@@ -4830,7 +4830,7 @@ BEGIN
            @errmsg  varchar(255)
     /* erwin Builtin Trigger */
     /* Sales.Currency  Sales.CountryRegionCurrency on child delete no action */
-    /* ERWIN_RELATION:CHECKSUM="0003502b", PARENT_OWNER="Sales", PARENT_TABLE="Currency"
+    /* ERWIN_RELATION:CHECKSUM="0003544e", PARENT_OWNER="Sales", PARENT_TABLE="Currency"
     CHILD_OWNER="Sales", CHILD_TABLE="CountryRegionCurrency"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="FK_Sales.Currency_Sales.Countr", FK_COLUMNS="CurrencyCode" */
@@ -4856,7 +4856,7 @@ BEGIN
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="Person", PARENT_TABLE="CountryRegion"
     CHILD_OWNER="Sales", CHILD_TABLE="CountryRegionCurrency"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="FK_Person.CountryRegion_Sales.", FK_COLUMNS="CountryRegionCode" */
+    FK_CONSTRAINT="FK_CountryRegion_CountryRegion", FK_COLUMNS="CountryRegionCode" */
     IF EXISTS (SELECT * FROM deleted,Person.CountryRegion
       WHERE
         /* %JoinFKPK(deleted,Person.CountryRegion," = "," AND") */
@@ -4906,7 +4906,7 @@ BEGIN
   SELECT @numrows = @@rowcount
   /* erwin Builtin Trigger */
   /* Sales.Currency  Sales.CountryRegionCurrency on child update no action */
-  /* ERWIN_RELATION:CHECKSUM="00034251", PARENT_OWNER="Sales", PARENT_TABLE="Currency"
+  /* ERWIN_RELATION:CHECKSUM="0003428f", PARENT_OWNER="Sales", PARENT_TABLE="Currency"
     CHILD_OWNER="Sales", CHILD_TABLE="CountryRegionCurrency"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="FK_Sales.Currency_Sales.Countr", FK_COLUMNS="CurrencyCode" */
@@ -4935,7 +4935,7 @@ BEGIN
   /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="Person", PARENT_TABLE="CountryRegion"
     CHILD_OWNER="Sales", CHILD_TABLE="CountryRegionCurrency"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="FK_Person.CountryRegion_Sales.", FK_COLUMNS="CountryRegionCode" */
+    FK_CONSTRAINT="FK_CountryRegion_CountryRegion", FK_COLUMNS="CountryRegionCode" */
   IF
     /* %ChildFK(" OR",UPDATE) */
     UPDATE(CountryRegionCode)
@@ -9262,10 +9262,10 @@ BEGIN
            @errmsg  varchar(255)
     /* erwin Builtin Trigger */
     /* Production.ProductDescription  Production.ProductModelProductDescription on parent delete no action */
-    /* ERWIN_RELATION:CHECKSUM="00018bcf", PARENT_OWNER="Production", PARENT_TABLE="ProductDescription"
+    /* ERWIN_RELATION:CHECKSUM="000191f9", PARENT_OWNER="Production", PARENT_TABLE="ProductDescription"
     CHILD_OWNER="Production", CHILD_TABLE="ProductModelProductDescription"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="FK_Production.ProductDescripti", FK_COLUMNS="ProductDescriptionID" */
+    FK_CONSTRAINT="FK_ProductDescription_ProductM", FK_COLUMNS="ProductDescriptionID" */
     IF EXISTS (
       SELECT * FROM deleted,Production.ProductModelProductDescription
       WHERE
@@ -9309,10 +9309,10 @@ BEGIN
   SELECT @numrows = @@rowcount
   /* erwin Builtin Trigger */
   /* Production.ProductDescription  Production.ProductModelProductDescription on parent update no action */
-  /* ERWIN_RELATION:CHECKSUM="0001b3eb", PARENT_OWNER="Production", PARENT_TABLE="ProductDescription"
+  /* ERWIN_RELATION:CHECKSUM="0001b747", PARENT_OWNER="Production", PARENT_TABLE="ProductDescription"
     CHILD_OWNER="Production", CHILD_TABLE="ProductModelProductDescription"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="FK_Production.ProductDescripti", FK_COLUMNS="ProductDescriptionID" */
+    FK_CONSTRAINT="FK_ProductDescription_ProductM", FK_COLUMNS="ProductDescriptionID" */
   IF
     /* %ParentPK(" OR",UPDATE) */
     UPDATE(ProductDescriptionID)
@@ -10085,7 +10085,7 @@ BEGIN
            @errmsg  varchar(255)
     /* erwin Builtin Trigger */
     /* Production.ProductModel  Production.ProductModelProductDescription on child delete no action */
-    /* ERWIN_RELATION:CHECKSUM="0005aea9", PARENT_OWNER="Production", PARENT_TABLE="ProductModel"
+    /* ERWIN_RELATION:CHECKSUM="000596f1", PARENT_OWNER="Production", PARENT_TABLE="ProductModel"
     CHILD_OWNER="Production", CHILD_TABLE="ProductModelProductDescription"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="FK_Production.ProductModel_Pro", FK_COLUMNS="ProductModelID" */
@@ -10134,7 +10134,7 @@ BEGIN
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="Production", PARENT_TABLE="ProductDescription"
     CHILD_OWNER="Production", CHILD_TABLE="ProductModelProductDescription"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="FK_Production.ProductDescripti", FK_COLUMNS="ProductDescriptionID" */
+    FK_CONSTRAINT="FK_ProductDescription_ProductM", FK_COLUMNS="ProductDescriptionID" */
     IF EXISTS (SELECT * FROM deleted,Production.ProductDescription
       WHERE
         /* %JoinFKPK(deleted,Production.ProductDescription," = "," AND") */
@@ -10185,7 +10185,7 @@ BEGIN
   SELECT @numrows = @@rowcount
   /* erwin Builtin Trigger */
   /* Production.ProductModel  Production.ProductModelProductDescription on child update no action */
-  /* ERWIN_RELATION:CHECKSUM="00054493", PARENT_OWNER="Production", PARENT_TABLE="ProductModel"
+  /* ERWIN_RELATION:CHECKSUM="0005351e", PARENT_OWNER="Production", PARENT_TABLE="ProductModel"
     CHILD_OWNER="Production", CHILD_TABLE="ProductModelProductDescription"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="FK_Production.ProductModel_Pro", FK_COLUMNS="ProductModelID" */
@@ -10240,7 +10240,7 @@ BEGIN
   /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="Production", PARENT_TABLE="ProductDescription"
     CHILD_OWNER="Production", CHILD_TABLE="ProductModelProductDescription"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="FK_Production.ProductDescripti", FK_COLUMNS="ProductDescriptionID" */
+    FK_CONSTRAINT="FK_ProductDescription_ProductM", FK_COLUMNS="ProductDescriptionID" */
   IF
     /* %ChildFK(" OR",UPDATE) */
     UPDATE(ProductDescriptionID)
@@ -13544,7 +13544,7 @@ BEGIN
            @errmsg  varchar(255)
     /* erwin Builtin Trigger */
     /* Sales.SalesTerritory  Person.StateProvince on parent delete no action */
-    /* ERWIN_RELATION:CHECKSUM="000786c2", PARENT_OWNER="Sales", PARENT_TABLE="SalesTerritory"
+    /* ERWIN_RELATION:CHECKSUM="00078b77", PARENT_OWNER="Sales", PARENT_TABLE="SalesTerritory"
     CHILD_OWNER="Person", CHILD_TABLE="StateProvince"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="FK_Sales.SalesTerritory_Person", FK_COLUMNS="TerritoryID" */
@@ -13637,7 +13637,7 @@ BEGIN
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="Person", PARENT_TABLE="CountryRegion"
     CHILD_OWNER="Sales", CHILD_TABLE="SalesTerritory"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="FK_Person.CountryRegion_Sales.", FK_COLUMNS="CountryRegionCode" */
+    FK_CONSTRAINT="FK_CountryRegion_SalesTerritor", FK_COLUMNS="CountryRegionCode" */
     IF EXISTS (SELECT * FROM deleted,Person.CountryRegion
       WHERE
         /* %JoinFKPK(deleted,Person.CountryRegion," = "," AND") */
@@ -13686,7 +13686,7 @@ BEGIN
   SELECT @numrows = @@rowcount
   /* erwin Builtin Trigger */
   /* Sales.SalesTerritory  Person.StateProvince on parent update no action */
-  /* ERWIN_RELATION:CHECKSUM="0008112c", PARENT_OWNER="Sales", PARENT_TABLE="SalesTerritory"
+  /* ERWIN_RELATION:CHECKSUM="00081246", PARENT_OWNER="Sales", PARENT_TABLE="SalesTerritory"
     CHILD_OWNER="Person", CHILD_TABLE="StateProvince"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="FK_Sales.SalesTerritory_Person", FK_COLUMNS="TerritoryID" */
@@ -13804,7 +13804,7 @@ BEGIN
   /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="Person", PARENT_TABLE="CountryRegion"
     CHILD_OWNER="Sales", CHILD_TABLE="SalesTerritory"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="FK_Person.CountryRegion_Sales.", FK_COLUMNS="CountryRegionCode" */
+    FK_CONSTRAINT="FK_CountryRegion_SalesTerritor", FK_COLUMNS="CountryRegionCode" */
   IF
     /* %ChildFK(" OR",UPDATE) */
     UPDATE(CountryRegionCode)
@@ -14711,7 +14711,7 @@ BEGIN
            @errmsg  varchar(255)
     /* erwin Builtin Trigger */
     /* Person.StateProvince  Sales.SalesTaxRate on parent delete no action */
-    /* ERWIN_RELATION:CHECKSUM="00056d36", PARENT_OWNER="Person", PARENT_TABLE="StateProvince"
+    /* ERWIN_RELATION:CHECKSUM="0005683e", PARENT_OWNER="Person", PARENT_TABLE="StateProvince"
     CHILD_OWNER="Sales", CHILD_TABLE="SalesTaxRate"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="FK_Person.StateProvince_Sales.", FK_COLUMNS="StateProvinceID" */
@@ -14773,7 +14773,7 @@ BEGIN
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="Person", PARENT_TABLE="CountryRegion"
     CHILD_OWNER="Person", CHILD_TABLE="StateProvince"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="FK_Person.CountryRegion_Person", FK_COLUMNS="CountryRegionCode" */
+    FK_CONSTRAINT="FK_CountryRegion_StateProvince", FK_COLUMNS="CountryRegionCode" */
     IF EXISTS (SELECT * FROM deleted,Person.CountryRegion
       WHERE
         /* %JoinFKPK(deleted,Person.CountryRegion," = "," AND") */
@@ -14822,7 +14822,7 @@ BEGIN
   SELECT @numrows = @@rowcount
   /* erwin Builtin Trigger */
   /* Person.StateProvince  Sales.SalesTaxRate on parent update no action */
-  /* ERWIN_RELATION:CHECKSUM="0005a521", PARENT_OWNER="Person", PARENT_TABLE="StateProvince"
+  /* ERWIN_RELATION:CHECKSUM="0005ab50", PARENT_OWNER="Person", PARENT_TABLE="StateProvince"
     CHILD_OWNER="Sales", CHILD_TABLE="SalesTaxRate"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="FK_Person.StateProvince_Sales.", FK_COLUMNS="StateProvinceID" */
@@ -14897,7 +14897,7 @@ BEGIN
   /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="Person", PARENT_TABLE="CountryRegion"
     CHILD_OWNER="Person", CHILD_TABLE="StateProvince"
     P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="FK_Person.CountryRegion_Person", FK_COLUMNS="CountryRegionCode" */
+    FK_CONSTRAINT="FK_CountryRegion_StateProvince", FK_COLUMNS="CountryRegionCode" */
   IF
     /* %ChildFK(" OR",UPDATE) */
     UPDATE(CountryRegionCode)
