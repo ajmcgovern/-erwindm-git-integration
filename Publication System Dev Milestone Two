@@ -4397,3 +4397,12 @@ go
 
 
 
+
+
+ALTER TABLE [dbo].[Crd_Card]
+  DROP COLUMN [Card_Exp_Dt]
+go
+
+ALTER TABLE [dbo].[Crd_Card]
+  DROP COLUMN [Crd_Card_Typ]
+go
