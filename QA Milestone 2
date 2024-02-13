@@ -1,0 +1,3990 @@
+
+CREATE TYPE [Phn_Stuff]
+	FROM INTEGER NULL
+go
+
+CREATE TABLE [Auth]
+( 
+	[Auth_Id]            char(9)  NOT NULL ,
+	[Auth_Lst_Nam]       varchar(25)  NOT NULL ,
+	[Auth_Frst_Nam]      varchar(15)  NULL ,
+	[Auth_Phn_Nbr]       integer  NULL ,
+	[Auth_Addr]          varchar(25)  NULL ,
+	[Auth_Cty]           varchar(25)  NULL ,
+	[Auth_St]            varchar(4)  NOT NULL ,
+	[Auth_Zip_Cd]        varchar(9)  NULL ,
+	[Cntrct]             int  NULL 
+)
+go
+
+CREATE TABLE [Bk_Ordr]
+( 
+	[Reschd_Ship_Dt]     datetime  NULL ,
+	[Ordr_Ship_Id]       char(9)  NOT NULL 
+	CONSTRAINT [area_codes_1160276702]
+		 DEFAULT  212
+	CONSTRAINT 
+		CHECK  ( [Ordr_Ship_Id]=201 OR [Ordr_Ship_Id]=212 OR [Ordr_Ship_Id]=215 OR [Ordr_Ship_Id]=732 OR [Ordr_Ship_Id]=908 ),
+	[Ordr_Nbr]           bit  NOT NULL ,
+	[Itm_Seq_Nbr]        bit  NOT NULL 
+)
+go
+
+CREATE TABLE [Book]
+( 
+	[Book_Id]            char(9)  NOT NULL ,
+	[Book_Nam]           character varying(80)  NULL ,
+	[Book_Typ]           char(12)  NULL 
+	CONSTRAINT [DF__titles__type__00551192]
+		 DEFAULT  'UNDECIDED',
+	[Publshr_Id]         char(9)  NULL ,
+	[MRSP_Prc]           money  NULL ,
+	[Advnc]              money  NULL ,
+	[Rylty_Trm]          int  NULL ,
+	[Book_Note]          character varying(200)  NULL ,
+	[Publctn_Dt]         datetime  NULL 
+	CONSTRAINT [DF__system__date_1043996315]
+		 DEFAULT  SYSDATE
+)
+go
+
+CREATE TABLE [Book_Retrun]
+( 
+	[Book_Rtrn_Id]       char(9)  NOT NULL ,
+	[Ordr_Nbr]           bit  NOT NULL ,
+	[Itm_Seq_Nbr]        bit  NOT NULL ,
+	[Book_Rtrn_Dt]       datetime  NULL 
+)
+go
+
+CREATE TABLE [Book_YTD_Sls]
+( 
+	[Book_Id]            char(9)  NOT NULL ,
+	[Yr_To_Dt_Sls_Amt]   DECIMAL(10,2)  NULL ,
+	[Yr_To_Dt_Sls_Dt]    datetime  NULL 
+	CONSTRAINT [DF__system__date_518575028]
+		 DEFAULT  SYSDATE
+)
+go
+
+CREATE TABLE [BookAuthor]
+( 
+	[Auth_Id]            char(9)  NOT NULL ,
+	[Book_Id]            char(9)  NOT NULL 
+)
+go
+
+CREATE TABLE [Crd_Card]
+( 
+	[Card_Nbr]           int  NULL ,
+	[Card_Exp_Dt]        datetime  NULL ,
+	[Crd_Card_Typ]       CHAR(4)  NULL ,
+	[Card_Vndr_Nam]      character varying(20)  NULL ,
+	[Crd_Card_Amt]       numeric(7,2)  NULL ,
+	[Pmt_Nbr]            int  NOT NULL 
+)
+go
+
+CREATE TABLE [Crd_Chk]
+( 
+	[Crd_Chk_Evnt]       CHAR(12)  NOT NULL ,
+	[Crd_Chk_Dt]         datetime  NULL 
+	CONSTRAINT [DF__system__date_740086126]
+		 DEFAULT  SYSDATE,
+	[Crd_Stat]           CHAR(12)  NULL ,
+	[Pmt_Nbr]            bit  NOT NULL 
+)
+go
+
+CREATE TABLE [Cust]
+( 
+	[Cust_Id]            char(9)  NOT NULL ,
+	[Cust_Frst_Nam]      varchar(15)  NULL ,
+	[Cust_Lst_Nam]       varchar(25)  NOT NULL ,
+	[Cust_Stret_Addr]    varchar(25)  NULL ,
+	[Cust_Cmpy_Nam]      varchar(40)  NULL ,
+	[Cust_Cty]           varchar(25)  NULL ,
+	[Cust_St]            varchar(4)  NOT NULL 
+	CONSTRAINT [state_code_54470175]
+		 DEFAULT  'NJ',
+	[Cust_Zip_Cd]        varchar(9)  NULL ,
+	[Cust_Phn_Area_Cd]   integer  NULL 
+	CONSTRAINT [area_codes_639185628]
+		 DEFAULT  212,
+	[Cust_Phn_Nbr]       integer  NULL ,
+	[Cust_Fax_Area_Cd]   integer  NULL 
+	CONSTRAINT [area_codes_755970790]
+		 DEFAULT  212
+	CONSTRAINT 
+		CHECK  ( [Cust_Fax_Area_Cd]=201 OR [Cust_Fax_Area_Cd]=212 OR [Cust_Fax_Area_Cd]=215 OR [Cust_Fax_Area_Cd]=732 OR [Cust_Fax_Area_Cd]=908 ),
+	[Cust_Fax_Nbr]       integer  NULL 
+)
+go
+
+CREATE TABLE [Disc]
+( 
+	[Disc_Typ]           varchar(4)  NOT NULL ,
+	[Lo_Qty]             int  NULL ,
+	[Hi_Qty]             int  NULL ,
+	[Disc_Pct]           decimal(4,2)  NULL 
+)
+go
+
+CREATE TABLE [Emp]
+( 
+	[Emp_Id]             char(9)  NOT NULL ,
+	[Emp_Frst_Nam]       character varying(20)  NULL ,
+	[Emp_Mid_Init]       char(1)  NULL ,
+	[Emp_Lst_Nam]        character varying(30)  NULL ,
+	[Job_Id]             char(9)  NOT NULL 
+	CONSTRAINT [DF__employee__job_id__1B0907CE]
+		 DEFAULT  1
+	CONSTRAINT 
+		CHECK  ( [Job_Id]=201 OR [Job_Id]=212 OR [Job_Id]=215 OR [Job_Id]=732 OR [Job_Id]=908 ),
+	[Curr_Emp_Job_Ttle]  tinyint  NULL 
+	CONSTRAINT [DF__employee__job_lv__1CF15040]
+		 DEFAULT  10,
+	[Emp_Hire_Dt]        datetime  NULL 
+	CONSTRAINT [DF__system__date_1233385636]
+		 DEFAULT  SYSDATE
+)
+go
+
+CREATE TABLE [Job]
+( 
+	[Job_Id]             char(9)  NOT NULL ,
+	[Job_Desc]           character varying(50)  NULL 
+	CONSTRAINT [DF__jobs__job_desc__1273C1CD]
+		 DEFAULT  'New Position - title not formalized yet',
+	[Min_LvL]            tinyint  NULL 
+	CONSTRAINT 
+		CHECK  ( Min_LvL >= 10 ),
+	[Max_LvL]            tinyint  NULL 
+	CONSTRAINT 
+		CHECK  ( Max_LvL <= 250 )
+)
+go
+
+CREATE TABLE [Mony_Ordr]
+( 
+	[Mony_Ordr_Nbr]      int  NULL ,
+	[Mony_Ordr_Amt]      numeric(7,2)  NULL ,
+	[Pmt_Nbr]            int  NOT NULL 
+)
+go
+
+CREATE TABLE [Ordr_Itm]
+( 
+	[Ordr_Qty]           int  NULL ,
+	[Ordr_Nbr]           bit  NOT NULL ,
+	[Book_Id]            char(9)  NOT NULL ,
+	[Itm_Seq_Nbr]        int  NOT NULL ,
+	[Disc_Typ]           character varying(4)  NULL ,
+	[Ordr_Disc_Amt]      DECIMAL(7,2)  NULL ,
+	[Ordr_Prc]           DECIMAL(7,2)  NULL 
+)
+go
+
+CREATE TABLE [Ordr_Ship]
+( 
+	[Ordr_Ship_Id]       char(9)  NOT NULL ,
+	[Blng_Addr]          varchar(25)  NULL ,
+	[Ship_Addr]          varchar(25)  NULL ,
+	[Ship_Stat]          CHAR(7)  NULL ,
+	[Shed_Ship_Dt]       datetime  NULL 
+	CONSTRAINT [DF__system__date_1786156281]
+		 DEFAULT  SYSDATE,
+	[Ordr_Nbr]           bit  NOT NULL ,
+	[Itm_Seq_Nbr]        bit  NOT NULL 
+)
+go
+
+CREATE TABLE [Personal_Chk]
+( 
+	[Chk_Nbr]            int  NULL ,
+	[Chk_Acct_Nbr]       int  NULL ,
+	[Chk_Bnk_Nbr]        int  NULL ,
+	[Chk_Dvr_Lic_Nbr]    CHAR(15)  NULL ,
+	[Chk_Amt]            numeric(7,2)  NULL ,
+	[Pmt_Nbr]            int  NOT NULL 
+)
+go
+
+CREATE TABLE [Pmt]
+( 
+	[Pmt_Nbr]            int  NOT NULL ,
+	[Pmt_Dt]             datetime  NULL 
+	CONSTRAINT [DF__system__date_1667382218]
+		 DEFAULT  SYSDATE,
+	[Pmt_Amt]            DECIMAL(7,2)  NULL ,
+	[Pmt_Typ]            CHAR(9)  NULL 
+)
+go
+
+CREATE TABLE [Publshr]
+( 
+	[Publshr_Id]         char(9)  NOT NULL ,
+	[Publshr_Nam]        character varying(40)  NULL ,
+	[Publshr_Addr]       varchar(25)  NULL ,
+	[Publshr_Cty]        varchar(25)  NULL ,
+	[Publshr_St]         varchar(4)  NOT NULL 
+	CONSTRAINT [DF__publisher__count__7D78A4E7]
+		 DEFAULT  'USA',
+	[Publshr_Zip_Cd]     varchar(9)  NULL 
+)
+go
+
+CREATE TABLE [Publshr_Logo]
+( 
+	[Publshr_Id]         char(9)  NOT NULL ,
+	[Publshr_Logo]       character(500)  NULL ,
+	[Publshr_Publc_Rel_Inf] varchar(200)  NULL 
+)
+go
+
+CREATE TABLE [Purchase_Ordr]
+( 
+	[Stor_Id]            char(9)  NOT NULL ,
+	[Ordr_Nbr]           int  NOT NULL ,
+	[Ordr_Dt]            datetime  NULL 
+	CONSTRAINT [DF__system__date_2120463774]
+		 DEFAULT  SYSDATE,
+	[Pmt_Trm]            character varying(12)  NULL ,
+	[Cust_Id]            char(9)  NULL 
+)
+go
+
+CREATE TABLE [Reporting_Structure]
+( 
+	[Mngr]               char(9)  NOT NULL ,
+	[Rpt_To]             char(9)  NOT NULL ,
+	[Strt_Dt]            datetime  NULL ,
+	[End_Dt]             datetime  NULL 
+)
+go
+
+CREATE TABLE [Rgn]
+( 
+	[Rgn_Id]             char(9)  NOT NULL ,
+	[Rgn_Area]           CHAR(7)  NULL ,
+	[Rgn_Desc]           varchar(75)  NULL 
+)
+go
+
+CREATE TABLE [Rylty]
+( 
+	[Lo_Rnge]            int  NULL ,
+	[Hi_Rnge]            int  NULL ,
+	[Rylty_Amt]          numeric(5,2)  NULL ,
+	[Rylty_Id]           char(9)  NOT NULL 
+)
+go
+
+CREATE TABLE [Rylty_Hist]
+( 
+	[Ordr_Nbr]           bit  NOT NULL ,
+	[Itm_Seq_Nbr]        bit  NOT NULL ,
+	[Rylty_Hist_Id]      char(9)  NOT NULL ,
+	[Rylty_Pmt_Dt]       datetime  NULL 
+	CONSTRAINT [DF__system__date_1990518587]
+		 DEFAULT  SYSDATE,
+	[Rylty_Pmt_Amt]      decimal(6,2)  NULL ,
+	[Rylty_Payee]        char(30)  NULL 
+)
+go
+
+CREATE TABLE [Rylty_Pmt]
+( 
+	[Auth_Id]            char(9)  NOT NULL ,
+	[Book_Id]            char(9)  NOT NULL ,
+	[Rylty_Id]           char(9)  NOT NULL 
+	CONSTRAINT [area_codes_1826540254]
+		 DEFAULT  212
+	CONSTRAINT 
+		CHECK  ( [Rylty_Id]=201 OR [Rylty_Id]=212 OR [Rylty_Id]=215 OR [Rylty_Id]=732 OR [Rylty_Id]=908 ),
+	[Pmt_Dt]             datetime  NULL 
+	CONSTRAINT [DF__system__date_668068810]
+		 DEFAULT  SYSDATE,
+	[Pmt_Amt]            DECIMAL(7,2)  NULL 
+)
+go
+
+CREATE TABLE [Stor_Nam]
+( 
+	[Stor_Id]            char(9)  NOT NULL ,
+	[Stor_Nam]           character varying(40)  NULL ,
+	[Stor_Addr]          varchar(25)  NULL ,
+	[Stor_Cty]           varchar(25)  NULL ,
+	[Stor_St]            varchar(4)  NOT NULL ,
+	[Stor_Zip_Cd]        varchar(9)  NULL ,
+	[Rgn_Id]             char(9)  NULL 
+)
+go
+
+ALTER TABLE [Auth]
+	ADD CONSTRAINT [UPKCL_auidind] PRIMARY KEY  NONCLUSTERED ([Auth_Id] ASC)
+go
+
+CREATE INDEX [aunmind] ON [Auth]
+( 
+	[Auth_Lst_Nam]        ASC,
+	[Auth_Frst_Nam]       ASC
+)
+go
+
+ALTER TABLE [Bk_Ordr]
+	ADD CONSTRAINT [XPKBack_Order] PRIMARY KEY  NONCLUSTERED ([Ordr_Ship_Id] ASC,[Ordr_Nbr] ASC,[Itm_Seq_Nbr] ASC)
+go
+
+ALTER TABLE [Book]
+	ADD CONSTRAINT [UPKCL_titleidind] PRIMARY KEY  NONCLUSTERED ([Book_Id] ASC)
+go
+
+CREATE INDEX [titleind] ON [Book]
+( 
+	[Book_Nam]            ASC
+)
+go
+
+ALTER TABLE [Book_Retrun]
+	ADD CONSTRAINT [XPKBook_Retrun] PRIMARY KEY  NONCLUSTERED ([Book_Rtrn_Id] ASC)
+go
+
+ALTER TABLE [Book_YTD_Sls]
+	ADD CONSTRAINT [XPKBook_YTD_Sales] PRIMARY KEY  NONCLUSTERED ([Book_Id] ASC)
+go
+
+ALTER TABLE [BookAuthor]
+	ADD CONSTRAINT [UPKCL_taind] PRIMARY KEY  NONCLUSTERED ([Auth_Id] ASC,[Book_Id] ASC)
+go
+
+ALTER TABLE [Crd_Card]
+	ADD CONSTRAINT [XPKCredit_Card] PRIMARY KEY  NONCLUSTERED ([Pmt_Nbr] ASC)
+go
+
+ALTER TABLE [Crd_Chk]
+	ADD CONSTRAINT [XPKCredit_Check] PRIMARY KEY  NONCLUSTERED ([Crd_Chk_Evnt] ASC)
+go
+
+ALTER TABLE [Cust]
+	ADD CONSTRAINT [XPKCustomer] PRIMARY KEY  NONCLUSTERED ([Cust_Id] ASC)
+go
+
+CREATE INDEX [XIE1Customer] ON [Cust]
+( 
+	[Cust_Lst_Nam]        ASC,
+	[Cust_Frst_Nam]       ASC
+)
+go
+
+ALTER TABLE [Disc]
+	ADD CONSTRAINT [XPKDiscount] PRIMARY KEY  NONCLUSTERED ([Disc_Typ] ASC)
+go
+
+ALTER TABLE [Emp]
+	ADD CONSTRAINT [PK_emp_id] PRIMARY KEY  NONCLUSTERED ([Emp_Id] ASC)
+go
+
+CREATE INDEX [employee_ind] ON [Emp]
+( 
+	[Emp_Lst_Nam]         ASC,
+	[Emp_Frst_Nam]        ASC,
+	[Emp_Mid_Init]        ASC
+)
+go
+
+ALTER TABLE [Job]
+	ADD CONSTRAINT [PK__jobs__117F9D94] PRIMARY KEY  NONCLUSTERED ([Job_Id] ASC)
+go
+
+ALTER TABLE [Ordr_Itm]
+	ADD CONSTRAINT [XPKOrder_Item] PRIMARY KEY  NONCLUSTERED ([Ordr_Nbr] ASC,[Itm_Seq_Nbr] ASC)
+go
+
+ALTER TABLE [Ordr_Ship]
+	ADD CONSTRAINT [XPKOrder_Shipment] PRIMARY KEY  NONCLUSTERED ([Ordr_Ship_Id] ASC,[Ordr_Nbr] ASC,[Itm_Seq_Nbr] ASC)
+go
+
+ALTER TABLE [Pmt]
+	ADD CONSTRAINT [XPKPayment] PRIMARY KEY  NONCLUSTERED ([Pmt_Nbr] ASC)
+go
+
+ALTER TABLE [Publshr]
+	ADD CONSTRAINT [UPKCL_pubind] PRIMARY KEY  NONCLUSTERED ([Publshr_Id] ASC)
+go
+
+ALTER TABLE [Publshr_Logo]
+	ADD CONSTRAINT [UPKCL_pubinfo] PRIMARY KEY  NONCLUSTERED ([Publshr_Id] ASC)
+go
+
+ALTER TABLE [Purchase_Ordr]
+	ADD CONSTRAINT [UPKCL_sales] PRIMARY KEY  NONCLUSTERED ([Ordr_Nbr] ASC)
+go
+
+ALTER TABLE [Reporting_Structure]
+	ADD CONSTRAINT [XPKReporting_Structure] PRIMARY KEY  NONCLUSTERED ([Mngr] ASC,[Rpt_To] ASC)
+go
+
+ALTER TABLE [Rgn]
+	ADD CONSTRAINT [XPKRegion] PRIMARY KEY  NONCLUSTERED ([Rgn_Id] ASC)
+go
+
+ALTER TABLE [Rylty]
+	ADD CONSTRAINT [XPKRoyalty] PRIMARY KEY  NONCLUSTERED ([Rylty_Id] ASC)
+go
+
+ALTER TABLE [Rylty_Hist]
+	ADD CONSTRAINT [XPKRoyalty_History] PRIMARY KEY  NONCLUSTERED ([Rylty_Hist_Id] ASC)
+go
+
+ALTER TABLE [Rylty_Pmt]
+	ADD CONSTRAINT [XPKRoyalty_Payment] PRIMARY KEY  NONCLUSTERED ([Auth_Id] ASC,[Book_Id] ASC,[Rylty_Id] ASC)
+go
+
+ALTER TABLE [Stor_Nam]
+	ADD CONSTRAINT [UPK_storeid] PRIMARY KEY  NONCLUSTERED ([Stor_Id] ASC)
+go
+
+CREATE VIEW titleview
+   (Book_Nam, Auth_Id, Auth_Lst_Nam, MRSP_Prc, Publshr_Id)
+AS SELECT
+   Book.Book_Nam, Auth.Auth_Id, Auth.Auth_Lst_Nam,
+   Book.MRSP_Prc, Book.Publshr_Id
+FROM Book, Auth, BookAuth
+
+go
+
+CREATE VIEW [Order_View]([Stor_Nam],[Ordr_Nbr],[Ordr_Dt],[Book_Nam],[Ordr_Qty],[Ordr_Disc_Amt],[Ordr_Prc])
+AS
+SELECT [Stor_Nam].[Stor_Nam],[Purchase_Ordr].[Ordr_Nbr],[Purchase_Ordr].[Ordr_Dt],[Book].[Book_Nam],[Ordr_Itm].[Ordr_Qty],[Ordr_Itm].[Ordr_Disc_Amt],[Ordr_Itm].[Ordr_Prc]
+	FROM [Ordr_Itm],[Book],[Purchase_Ordr],[Stor_Nam]
+go
+
+CREATE VIEW [Publisher_View]([Emp_Frst_Nam],[Emp_Lst_Nam],[Publshr_Nam],[Book_Nam],[Yr_To_Dt_Sls_Amt])
+AS
+SELECT [Emp].[Emp_Frst_Nam],[Emp].[Emp_Lst_Nam],[Publshr].[Publshr_Nam],[Book].[Book_Nam],[Book_YTD_Sls].[Yr_To_Dt_Sls_Amt]
+	FROM [Publshr],[Book],[Book_YTD_Sls],[Emp]
+go
+
+CREATE VIEW [Payment_View]([Card_Nbr],[Crd_Card_Amt],[Mony_Ordr_Nbr],[Mony_Ordr_Amt],[Chk_Nbr],[Chk_Amt],[Cust_Frst_Nam],[Cust_Lst_Nam],[Ordr_Nbr],[Ordr_Dt])
+AS
+SELECT [Crd_Card].[Card_Nbr],[Crd_Card].[Crd_Card_Amt],[Mony_Ordr].[Mony_Ordr_Nbr],[Mony_Ordr].[Mony_Ordr_Amt],[Personal_Chk].[Chk_Nbr],[Personal_Chk].[Chk_Amt],[Cust].[Cust_Frst_Nam],[Cust].[Cust_Lst_Nam],[Purchase_Ordr].[Ordr_Nbr],[Purchase_Ordr].[Ordr_Dt]
+	FROM [Mony_Ordr],[Pmt],[Crd_Card],[Personal_Chk],[Cust],[Purchase_Ordr]
+go
+
+
+ALTER TABLE [Bk_Ordr]
+	ADD CONSTRAINT [FK_Ordr_Ship_Bk_Ordr] FOREIGN KEY ([Ordr_Ship_Id],[Ordr_Nbr],[Itm_Seq_Nbr]) REFERENCES [Ordr_Ship]([Ordr_Ship_Id],[Ordr_Nbr],[Itm_Seq_Nbr])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+
+ALTER TABLE [Book]
+	ADD CONSTRAINT [FK_Publshr_Book] FOREIGN KEY ([Publshr_Id]) REFERENCES [Publshr]([Publshr_Id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+
+ALTER TABLE [Book_Retrun]
+	ADD CONSTRAINT [FK_Ordr_Itm_Book_Retrun] FOREIGN KEY ([Ordr_Nbr],[Itm_Seq_Nbr]) REFERENCES [Ordr_Itm]([Ordr_Nbr],[Itm_Seq_Nbr])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+
+ALTER TABLE [Book_YTD_Sls]
+	ADD CONSTRAINT [FK_Book_Book_YTD_Sls] FOREIGN KEY ([Book_Id]) REFERENCES [Book]([Book_Id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+
+ALTER TABLE [BookAuthor]
+	ADD CONSTRAINT [FK_Auth_BookAuthor] FOREIGN KEY ([Auth_Id]) REFERENCES [Auth]([Auth_Id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+ALTER TABLE [BookAuthor]
+	ADD CONSTRAINT [FK_Book_BookAuthor] FOREIGN KEY ([Book_Id]) REFERENCES [Book]([Book_Id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+
+ALTER TABLE [Crd_Chk]
+	ADD CONSTRAINT [FK_Crd_Card_Crd_Chk] FOREIGN KEY ([Pmt_Nbr]) REFERENCES [Crd_Card]([Pmt_Nbr])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+
+ALTER TABLE [Emp]
+	ADD CONSTRAINT [FK_Job_Emp] FOREIGN KEY ([Job_Id]) REFERENCES [Job]([Job_Id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+
+ALTER TABLE [Mony_Ordr]
+	ADD CONSTRAINT [FK_Pmt_Mony_Ordr] FOREIGN KEY ([Pmt_Nbr]) REFERENCES [Pmt]([Pmt_Nbr])
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
+go
+
+
+ALTER TABLE [Ordr_Itm]
+	ADD CONSTRAINT [FK_Disc_Ordr_Itm] FOREIGN KEY ([Disc_Typ]) REFERENCES [Disc]([Disc_Typ])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+ALTER TABLE [Ordr_Itm]
+	ADD CONSTRAINT [FK_Purchase_Ordr_Ordr_Itm] FOREIGN KEY ([Ordr_Nbr]) REFERENCES [Purchase_Ordr]([Ordr_Nbr])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+ALTER TABLE [Ordr_Itm]
+	ADD CONSTRAINT [FK_Book_Ordr_Itm] FOREIGN KEY ([Book_Id]) REFERENCES [Book]([Book_Id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+
+ALTER TABLE [Ordr_Ship]
+	ADD CONSTRAINT [FK_Ordr_Itm_Ordr_Ship] FOREIGN KEY ([Ordr_Nbr],[Itm_Seq_Nbr]) REFERENCES [Ordr_Itm]([Ordr_Nbr],[Itm_Seq_Nbr])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+
+ALTER TABLE [Personal_Chk]
+	ADD CONSTRAINT [FK_Pmt_Personal_Chk] FOREIGN KEY ([Pmt_Nbr]) REFERENCES [Pmt]([Pmt_Nbr])
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
+go
+
+
+ALTER TABLE [Publshr_Logo]
+	ADD CONSTRAINT [FK_Publshr_Publshr_Logo] FOREIGN KEY ([Publshr_Id]) REFERENCES [Publshr]([Publshr_Id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+
+ALTER TABLE [Purchase_Ordr]
+	ADD CONSTRAINT [FK_Cust_Purchase_Ordr] FOREIGN KEY ([Cust_Id]) REFERENCES [Cust]([Cust_Id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+ALTER TABLE [Purchase_Ordr]
+	ADD CONSTRAINT [FK_Stor_Nam_Purchase_Ordr] FOREIGN KEY ([Stor_Id]) REFERENCES [Stor_Nam]([Stor_Id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+
+ALTER TABLE [Reporting_Structure]
+	ADD CONSTRAINT [FK_Employee_Manager] FOREIGN KEY ([Mngr]) REFERENCES [Emp]([Emp_Id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+ALTER TABLE [Reporting_Structure]
+	ADD CONSTRAINT [FK_Employee_ReportTo] FOREIGN KEY ([Rpt_To]) REFERENCES [Emp]([Emp_Id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+
+ALTER TABLE [Rylty_Hist]
+	ADD CONSTRAINT [FK_Ordr_Itm_Rylty_Hist] FOREIGN KEY ([Ordr_Nbr],[Itm_Seq_Nbr]) REFERENCES [Ordr_Itm]([Ordr_Nbr],[Itm_Seq_Nbr])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+
+ALTER TABLE [Rylty_Pmt]
+	ADD CONSTRAINT [FK_Rylty_Rylty_Pmt] FOREIGN KEY ([Rylty_Id]) REFERENCES [Rylty]([Rylty_Id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+ALTER TABLE [Rylty_Pmt]
+	ADD CONSTRAINT [FK_BookAuthor_Rylty_Pmt] FOREIGN KEY ([Auth_Id],[Book_Id]) REFERENCES [BookAuthor]([Auth_Id],[Book_Id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+
+ALTER TABLE [Stor_Nam]
+	ADD CONSTRAINT [FK_Rgn_Stor_Nam] FOREIGN KEY ([Rgn_Id]) REFERENCES [Rgn]([Rgn_Id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+CREATE TRIGGER tD_BookAuth ON BookAuthor FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on BookAuthor */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* BookAuthor  Rylty_Pmt on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00035880", PARENT_OWNER="", PARENT_TABLE="BookAuthor"
+    CHILD_OWNER="", CHILD_TABLE="Rylty_Pmt"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_BookAuthor_Rylty_Pmt", FK_COLUMNS="Auth_Id""Book_Id" */
+    IF EXISTS (
+      SELECT * FROM deleted,Rylty_Pmt
+      WHERE
+        /*  %JoinFKPK(Rylty_Pmt,deleted," = "," AND") */
+        Rylty_Pmt.Auth_Id = deleted.Auth_Id AND
+        Rylty_Pmt.Book_Id = deleted.Book_Id
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete BookAuthor because Rylty_Pmt exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* Book  BookAuthor on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Book"
+    CHILD_OWNER="", CHILD_TABLE="BookAuthor"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Book_BookAuthor", FK_COLUMNS="Book_Id" */
+    IF EXISTS (SELECT * FROM deleted,Book
+      WHERE
+        /* %JoinFKPK(deleted,Book," = "," AND") */
+        deleted.Book_Id = Book.Book_Id AND
+        NOT EXISTS (
+          SELECT * FROM BookAuthor
+          WHERE
+            /* %JoinFKPK(BookAuthor,Book," = "," AND") */
+            BookAuthor.Book_Id = Book.Book_Id
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last BookAuthor because Book exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* Auth  BookAuthor on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Auth"
+    CHILD_OWNER="", CHILD_TABLE="BookAuthor"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Auth_BookAuthor", FK_COLUMNS="Auth_Id" */
+    IF EXISTS (SELECT * FROM deleted,Auth
+      WHERE
+        /* %JoinFKPK(deleted,Auth," = "," AND") */
+        deleted.Auth_Id = Auth.Auth_Id AND
+        NOT EXISTS (
+          SELECT * FROM BookAuthor
+          WHERE
+            /* %JoinFKPK(BookAuthor,Auth," = "," AND") */
+            BookAuthor.Auth_Id = Auth.Auth_Id
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last BookAuthor because Auth exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_BookAuth ON BookAuthor FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on BookAuthor */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insAuth_Id char(9), 
+           @insBook_Id char(9),
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* BookAuthor  Rylty_Pmt on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="0003cf32", PARENT_OWNER="", PARENT_TABLE="BookAuthor"
+    CHILD_OWNER="", CHILD_TABLE="Rylty_Pmt"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_BookAuthor_Rylty_Pmt", FK_COLUMNS="Auth_Id""Book_Id" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Auth_Id) OR
+    UPDATE(Book_Id)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,Rylty_Pmt
+      WHERE
+        /*  %JoinFKPK(Rylty_Pmt,deleted," = "," AND") */
+        Rylty_Pmt.Auth_Id = deleted.Auth_Id AND
+        Rylty_Pmt.Book_Id = deleted.Book_Id
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update BookAuthor because Rylty_Pmt exists.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* Book  BookAuthor on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Book"
+    CHILD_OWNER="", CHILD_TABLE="BookAuthor"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Book_BookAuthor", FK_COLUMNS="Book_Id" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Book_Id)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,Book
+        WHERE
+          /* %JoinFKPK(inserted,Book) */
+          inserted.Book_Id = Book.Book_Id
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update BookAuthor because Book does not exist.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* Auth  BookAuthor on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Auth"
+    CHILD_OWNER="", CHILD_TABLE="BookAuthor"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Auth_BookAuthor", FK_COLUMNS="Auth_Id" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Auth_Id)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,Auth
+        WHERE
+          /* %JoinFKPK(inserted,Auth) */
+          inserted.Auth_Id = Auth.Auth_Id
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update BookAuthor because Auth does not exist.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_Stor_Nam ON Stor_Nam FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Stor_Nam */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* Stor_Nam  Purchase_Ordr on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00022e1f", PARENT_OWNER="", PARENT_TABLE="Stor_Nam"
+    CHILD_OWNER="", CHILD_TABLE="Purchase_Ordr"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Stor_Nam_Purchase_Ordr", FK_COLUMNS="Stor_Id" */
+    IF EXISTS (
+      SELECT * FROM deleted,Purchase_Ordr
+      WHERE
+        /*  %JoinFKPK(Purchase_Ordr,deleted," = "," AND") */
+        Purchase_Ordr.Stor_Id = deleted.Stor_Id
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete Stor_Nam because Purchase_Ordr exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* Rgn  Stor_Nam on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Rgn"
+    CHILD_OWNER="", CHILD_TABLE="Stor_Nam"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Rgn_Stor_Nam", FK_COLUMNS="Rgn_Id" */
+    IF EXISTS (SELECT * FROM deleted,Rgn
+      WHERE
+        /* %JoinFKPK(deleted,Rgn," = "," AND") */
+        deleted.Rgn_Id = Rgn.Rgn_Id AND
+        NOT EXISTS (
+          SELECT * FROM Stor_Nam
+          WHERE
+            /* %JoinFKPK(Stor_Nam,Rgn," = "," AND") */
+            Stor_Nam.Rgn_Id = Rgn.Rgn_Id
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last Stor_Nam because Rgn exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Stor_Nam ON Stor_Nam FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Stor_Nam */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insStor_Id char(9),
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* Stor_Nam  Purchase_Ordr on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00028207", PARENT_OWNER="", PARENT_TABLE="Stor_Nam"
+    CHILD_OWNER="", CHILD_TABLE="Purchase_Ordr"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Stor_Nam_Purchase_Ordr", FK_COLUMNS="Stor_Id" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Stor_Id)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,Purchase_Ordr
+      WHERE
+        /*  %JoinFKPK(Purchase_Ordr,deleted," = "," AND") */
+        Purchase_Ordr.Stor_Id = deleted.Stor_Id
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update Stor_Nam because Purchase_Ordr exists.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* Rgn  Stor_Nam on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Rgn"
+    CHILD_OWNER="", CHILD_TABLE="Stor_Nam"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Rgn_Stor_Nam", FK_COLUMNS="Rgn_Id" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Rgn_Id)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,Rgn
+        WHERE
+          /* %JoinFKPK(inserted,Rgn) */
+          inserted.Rgn_Id = Rgn.Rgn_Id
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    select @nullcnt = count(*) from inserted where
+      inserted.Rgn_Id IS NULL
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update Stor_Nam because Rgn does not exist.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_Purchase_Ordr ON Purchase_Ordr FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Purchase_Ordr */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* Purchase_Ordr  Ordr_Itm on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00038418", PARENT_OWNER="", PARENT_TABLE="Purchase_Ordr"
+    CHILD_OWNER="", CHILD_TABLE="Ordr_Itm"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Purchase_Ordr_Ordr_Itm", FK_COLUMNS="Ordr_Nbr" */
+    IF EXISTS (
+      SELECT * FROM deleted,Ordr_Itm
+      WHERE
+        /*  %JoinFKPK(Ordr_Itm,deleted," = "," AND") */
+        Ordr_Itm.Ordr_Nbr = deleted.Ordr_Nbr
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete Purchase_Ordr because Ordr_Itm exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* Cust  Purchase_Ordr on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Cust"
+    CHILD_OWNER="", CHILD_TABLE="Purchase_Ordr"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Cust_Purchase_Ordr", FK_COLUMNS="Cust_Id" */
+    IF EXISTS (SELECT * FROM deleted,Cust
+      WHERE
+        /* %JoinFKPK(deleted,Cust," = "," AND") */
+        deleted.Cust_Id = Cust.Cust_Id AND
+        NOT EXISTS (
+          SELECT * FROM Purchase_Ordr
+          WHERE
+            /* %JoinFKPK(Purchase_Ordr,Cust," = "," AND") */
+            Purchase_Ordr.Cust_Id = Cust.Cust_Id
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last Purchase_Ordr because Cust exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* Stor_Nam  Purchase_Ordr on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Stor_Nam"
+    CHILD_OWNER="", CHILD_TABLE="Purchase_Ordr"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Stor_Nam_Purchase_Ordr", FK_COLUMNS="Stor_Id" */
+    IF EXISTS (SELECT * FROM deleted,Stor_Nam
+      WHERE
+        /* %JoinFKPK(deleted,Stor_Nam," = "," AND") */
+        deleted.Stor_Id = Stor_Nam.Stor_Id AND
+        NOT EXISTS (
+          SELECT * FROM Purchase_Ordr
+          WHERE
+            /* %JoinFKPK(Purchase_Ordr,Stor_Nam," = "," AND") */
+            Purchase_Ordr.Stor_Id = Stor_Nam.Stor_Id
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last Purchase_Ordr because Stor_Nam exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Purchase_Ordr ON Purchase_Ordr FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Purchase_Ordr */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insOrdr_Nbr int,
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* Purchase_Ordr  Ordr_Itm on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="0003f343", PARENT_OWNER="", PARENT_TABLE="Purchase_Ordr"
+    CHILD_OWNER="", CHILD_TABLE="Ordr_Itm"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Purchase_Ordr_Ordr_Itm", FK_COLUMNS="Ordr_Nbr" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Ordr_Nbr)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,Ordr_Itm
+      WHERE
+        /*  %JoinFKPK(Ordr_Itm,deleted," = "," AND") */
+        Ordr_Itm.Ordr_Nbr = deleted.Ordr_Nbr
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update Purchase_Ordr because Ordr_Itm exists.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* Cust  Purchase_Ordr on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Cust"
+    CHILD_OWNER="", CHILD_TABLE="Purchase_Ordr"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Cust_Purchase_Ordr", FK_COLUMNS="Cust_Id" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Cust_Id)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,Cust
+        WHERE
+          /* %JoinFKPK(inserted,Cust) */
+          inserted.Cust_Id = Cust.Cust_Id
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    select @nullcnt = count(*) from inserted where
+      inserted.Cust_Id IS NULL
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update Purchase_Ordr because Cust does not exist.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* Stor_Nam  Purchase_Ordr on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Stor_Nam"
+    CHILD_OWNER="", CHILD_TABLE="Purchase_Ordr"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Stor_Nam_Purchase_Ordr", FK_COLUMNS="Stor_Id" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Stor_Id)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,Stor_Nam
+        WHERE
+          /* %JoinFKPK(inserted,Stor_Nam) */
+          inserted.Stor_Id = Stor_Nam.Stor_Id
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update Purchase_Ordr because Stor_Nam does not exist.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_Rylty ON Rylty FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Rylty */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* Rylty  Rylty_Pmt on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00010ebd", PARENT_OWNER="", PARENT_TABLE="Rylty"
+    CHILD_OWNER="", CHILD_TABLE="Rylty_Pmt"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Rylty_Rylty_Pmt", FK_COLUMNS="Rylty_Id" */
+    IF EXISTS (
+      SELECT * FROM deleted,Rylty_Pmt
+      WHERE
+        /*  %JoinFKPK(Rylty_Pmt,deleted," = "," AND") */
+        Rylty_Pmt.Rylty_Id = deleted.Rylty_Id
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete Rylty because Rylty_Pmt exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Rylty ON Rylty FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Rylty */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insRylty_Id char(9),
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* Rylty  Rylty_Pmt on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00013321", PARENT_OWNER="", PARENT_TABLE="Rylty"
+    CHILD_OWNER="", CHILD_TABLE="Rylty_Pmt"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Rylty_Rylty_Pmt", FK_COLUMNS="Rylty_Id" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Rylty_Id)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,Rylty_Pmt
+      WHERE
+        /*  %JoinFKPK(Rylty_Pmt,deleted," = "," AND") */
+        Rylty_Pmt.Rylty_Id = deleted.Rylty_Id
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update Rylty because Rylty_Pmt exists.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_Disc ON Disc FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Disc */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* Disc  Ordr_Itm on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="000106f4", PARENT_OWNER="", PARENT_TABLE="Disc"
+    CHILD_OWNER="", CHILD_TABLE="Ordr_Itm"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Disc_Ordr_Itm", FK_COLUMNS="Disc_Typ" */
+    IF EXISTS (
+      SELECT * FROM deleted,Ordr_Itm
+      WHERE
+        /*  %JoinFKPK(Ordr_Itm,deleted," = "," AND") */
+        Ordr_Itm.Disc_Typ = deleted.Disc_Typ
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete Disc because Ordr_Itm exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Disc ON Disc FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Disc */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insDisc_Typ varchar(4),
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* Disc  Ordr_Itm on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="000114d5", PARENT_OWNER="", PARENT_TABLE="Disc"
+    CHILD_OWNER="", CHILD_TABLE="Ordr_Itm"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Disc_Ordr_Itm", FK_COLUMNS="Disc_Typ" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Disc_Typ)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,Ordr_Itm
+      WHERE
+        /*  %JoinFKPK(Ordr_Itm,deleted," = "," AND") */
+        Ordr_Itm.Disc_Typ = deleted.Disc_Typ
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update Disc because Ordr_Itm exists.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_Job ON Job FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Job */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* Job  Emp on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="0000f7d3", PARENT_OWNER="", PARENT_TABLE="Job"
+    CHILD_OWNER="", CHILD_TABLE="Emp"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Job_Emp", FK_COLUMNS="Job_Id" */
+    IF EXISTS (
+      SELECT * FROM deleted,Emp
+      WHERE
+        /*  %JoinFKPK(Emp,deleted," = "," AND") */
+        Emp.Job_Id = deleted.Job_Id
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete Job because Emp exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Job ON Job FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Job */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insJob_Id char(9),
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* Job  Emp on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="000111e9", PARENT_OWNER="", PARENT_TABLE="Job"
+    CHILD_OWNER="", CHILD_TABLE="Emp"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Job_Emp", FK_COLUMNS="Job_Id" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Job_Id)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,Emp
+      WHERE
+        /*  %JoinFKPK(Emp,deleted," = "," AND") */
+        Emp.Job_Id = deleted.Job_Id
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update Job because Emp exists.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_Publshr_Logo ON Publshr_Logo FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Publshr_Logo */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* Publshr  Publshr_Logo on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00015cb4", PARENT_OWNER="", PARENT_TABLE="Publshr"
+    CHILD_OWNER="", CHILD_TABLE="Publshr_Logo"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Publshr_Publshr_Logo", FK_COLUMNS="Publshr_Id" */
+    IF EXISTS (SELECT * FROM deleted,Publshr
+      WHERE
+        /* %JoinFKPK(deleted,Publshr," = "," AND") */
+        deleted.Publshr_Id = Publshr.Publshr_Id AND
+        NOT EXISTS (
+          SELECT * FROM Publshr_Logo
+          WHERE
+            /* %JoinFKPK(Publshr_Logo,Publshr," = "," AND") */
+            Publshr_Logo.Publshr_Id = Publshr.Publshr_Id
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last Publshr_Logo because Publshr exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Publshr_Logo ON Publshr_Logo FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Publshr_Logo */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insPublshr_Id char(9),
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* Publshr  Publshr_Logo on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="00017e60", PARENT_OWNER="", PARENT_TABLE="Publshr"
+    CHILD_OWNER="", CHILD_TABLE="Publshr_Logo"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Publshr_Publshr_Logo", FK_COLUMNS="Publshr_Id" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Publshr_Id)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,Publshr
+        WHERE
+          /* %JoinFKPK(inserted,Publshr) */
+          inserted.Publshr_Id = Publshr.Publshr_Id
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update Publshr_Logo because Publshr does not exist.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE  TRIGGER [employee_insupd]
+  AFTER INSERT OR UPDATE
+  ON Emp
+  
+  
+  
+
+--Get the range of level for this job type from the jobs table.
+declare Xmin_lvl smallint;
+        Xmax_lvl smallint;
+        Xemp_lvl smallint;
+        Xjob_id  smallint;
+
+Begin
+   select Xmin_lvl = min_lvl,
+      Xmax_lvl = max_lvl,
+      Xemp_lvl = i.job_lvl,
+      Xjob_id = i.job_id
+   from employee e, jobs j, inserted i
+   where e.emp_id = i.emp_id AND i.job_id = j.job_id;
+
+   IF (Xjob_id = 1) and (Xemp_lvl <> 10) then
+      raise_application_error (-20001, 
+      'Job id 1 expects the default level of 10.');
+   ELSE
+      IF NOT (Xemp_lvl BETWEEN Xmin_lvl AND Xmax_lvl) then
+         raise_application_error (-20002, 
+         'The level for job_id:%d should be between %d and %d.', 
+         Xjob_id, Xmin_lvl, Xmax_lvl);
+      end if;
+   end if;
+END;
+
+ENABLE TRIGGER [employee_insupd] ON Emp
+go
+
+CREATE TRIGGER tD_Emp ON Emp FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Emp */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* Emp  Reporting_Structure on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00031d77", PARENT_OWNER="", PARENT_TABLE="Emp"
+    CHILD_OWNER="", CHILD_TABLE="Reporting_Structure"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Employee_ReportTo", FK_COLUMNS="Rpt_To" */
+    IF EXISTS (
+      SELECT * FROM deleted,Reporting_Structure
+      WHERE
+        /*  %JoinFKPK(Reporting_Structure,deleted," = "," AND") */
+        Reporting_Structure.Rpt_To = deleted.Emp_Id
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete Emp because Reporting_Structure exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* Emp  Reporting_Structure on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Emp"
+    CHILD_OWNER="", CHILD_TABLE="Reporting_Structure"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Employee_Manager", FK_COLUMNS="Mngr" */
+    IF EXISTS (
+      SELECT * FROM deleted,Reporting_Structure
+      WHERE
+        /*  %JoinFKPK(Reporting_Structure,deleted," = "," AND") */
+        Reporting_Structure.Mngr = deleted.Emp_Id
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete Emp because Reporting_Structure exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* Job  Emp on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Job"
+    CHILD_OWNER="", CHILD_TABLE="Emp"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Job_Emp", FK_COLUMNS="Job_Id" */
+    IF EXISTS (SELECT * FROM deleted,Job
+      WHERE
+        /* %JoinFKPK(deleted,Job," = "," AND") */
+        deleted.Job_Id = Job.Job_Id AND
+        NOT EXISTS (
+          SELECT * FROM Emp
+          WHERE
+            /* %JoinFKPK(Emp,Job," = "," AND") */
+            Emp.Job_Id = Job.Job_Id
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last Emp because Job exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Emp ON Emp FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Emp */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insEmp_Id char(9),
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* Emp  Reporting_Structure on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00038c5d", PARENT_OWNER="", PARENT_TABLE="Emp"
+    CHILD_OWNER="", CHILD_TABLE="Reporting_Structure"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Employee_ReportTo", FK_COLUMNS="Rpt_To" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Emp_Id)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,Reporting_Structure
+      WHERE
+        /*  %JoinFKPK(Reporting_Structure,deleted," = "," AND") */
+        Reporting_Structure.Rpt_To = deleted.Emp_Id
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update Emp because Reporting_Structure exists.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* Emp  Reporting_Structure on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Emp"
+    CHILD_OWNER="", CHILD_TABLE="Reporting_Structure"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Employee_Manager", FK_COLUMNS="Mngr" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Emp_Id)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,Reporting_Structure
+      WHERE
+        /*  %JoinFKPK(Reporting_Structure,deleted," = "," AND") */
+        Reporting_Structure.Mngr = deleted.Emp_Id
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update Emp because Reporting_Structure exists.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* Job  Emp on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Job"
+    CHILD_OWNER="", CHILD_TABLE="Emp"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Job_Emp", FK_COLUMNS="Job_Id" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Job_Id)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,Job
+        WHERE
+          /* %JoinFKPK(inserted,Job) */
+          inserted.Job_Id = Job.Job_Id
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update Emp because Job does not exist.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_Auth ON Auth FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Auth */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* Auth  BookAuthor on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00010d81", PARENT_OWNER="", PARENT_TABLE="Auth"
+    CHILD_OWNER="", CHILD_TABLE="BookAuthor"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Auth_BookAuthor", FK_COLUMNS="Auth_Id" */
+    IF EXISTS (
+      SELECT * FROM deleted,BookAuthor
+      WHERE
+        /*  %JoinFKPK(BookAuthor,deleted," = "," AND") */
+        BookAuthor.Auth_Id = deleted.Auth_Id
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete Auth because BookAuthor exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Auth ON Auth FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Auth */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insAuth_Id char(9),
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* Auth  BookAuthor on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00012e6b", PARENT_OWNER="", PARENT_TABLE="Auth"
+    CHILD_OWNER="", CHILD_TABLE="BookAuthor"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Auth_BookAuthor", FK_COLUMNS="Auth_Id" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Auth_Id)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,BookAuthor
+      WHERE
+        /*  %JoinFKPK(BookAuthor,deleted," = "," AND") */
+        BookAuthor.Auth_Id = deleted.Auth_Id
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update Auth because BookAuthor exists.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_Publshr ON Publshr FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Publshr */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* Publshr  Publshr_Logo on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="0001fb7b", PARENT_OWNER="", PARENT_TABLE="Publshr"
+    CHILD_OWNER="", CHILD_TABLE="Publshr_Logo"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Publshr_Publshr_Logo", FK_COLUMNS="Publshr_Id" */
+    IF EXISTS (
+      SELECT * FROM deleted,Publshr_Logo
+      WHERE
+        /*  %JoinFKPK(Publshr_Logo,deleted," = "," AND") */
+        Publshr_Logo.Publshr_Id = deleted.Publshr_Id
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete Publshr because Publshr_Logo exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* Publshr  Book on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Publshr"
+    CHILD_OWNER="", CHILD_TABLE="Book"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Publshr_Book", FK_COLUMNS="Publshr_Id" */
+    IF EXISTS (
+      SELECT * FROM deleted,Book
+      WHERE
+        /*  %JoinFKPK(Book,deleted," = "," AND") */
+        Book.Publshr_Id = deleted.Publshr_Id
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete Publshr because Book exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Publshr ON Publshr FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Publshr */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insPublshr_Id char(9),
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* Publshr  Publshr_Logo on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00023fa2", PARENT_OWNER="", PARENT_TABLE="Publshr"
+    CHILD_OWNER="", CHILD_TABLE="Publshr_Logo"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Publshr_Publshr_Logo", FK_COLUMNS="Publshr_Id" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Publshr_Id)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,Publshr_Logo
+      WHERE
+        /*  %JoinFKPK(Publshr_Logo,deleted," = "," AND") */
+        Publshr_Logo.Publshr_Id = deleted.Publshr_Id
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update Publshr because Publshr_Logo exists.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* Publshr  Book on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Publshr"
+    CHILD_OWNER="", CHILD_TABLE="Book"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Publshr_Book", FK_COLUMNS="Publshr_Id" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Publshr_Id)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,Book
+      WHERE
+        /*  %JoinFKPK(Book,deleted," = "," AND") */
+        Book.Publshr_Id = deleted.Publshr_Id
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update Publshr because Book exists.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_Book ON Book FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Book */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* Book  BookAuthor on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00040c6a", PARENT_OWNER="", PARENT_TABLE="Book"
+    CHILD_OWNER="", CHILD_TABLE="BookAuthor"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Book_BookAuthor", FK_COLUMNS="Book_Id" */
+    IF EXISTS (
+      SELECT * FROM deleted,BookAuthor
+      WHERE
+        /*  %JoinFKPK(BookAuthor,deleted," = "," AND") */
+        BookAuthor.Book_Id = deleted.Book_Id
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete Book because BookAuthor exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* Book  Book_YTD_Sls on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Book"
+    CHILD_OWNER="", CHILD_TABLE="Book_YTD_Sls"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Book_Book_YTD_Sls", FK_COLUMNS="Book_Id" */
+    IF EXISTS (
+      SELECT * FROM deleted,Book_YTD_Sls
+      WHERE
+        /*  %JoinFKPK(Book_YTD_Sls,deleted," = "," AND") */
+        Book_YTD_Sls.Book_Id = deleted.Book_Id
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete Book because Book_YTD_Sls exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* Book  Ordr_Itm on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Book"
+    CHILD_OWNER="", CHILD_TABLE="Ordr_Itm"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Book_Ordr_Itm", FK_COLUMNS="Book_Id" */
+    IF EXISTS (
+      SELECT * FROM deleted,Ordr_Itm
+      WHERE
+        /*  %JoinFKPK(Ordr_Itm,deleted," = "," AND") */
+        Ordr_Itm.Book_Id = deleted.Book_Id
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete Book because Ordr_Itm exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* Publshr  Book on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Publshr"
+    CHILD_OWNER="", CHILD_TABLE="Book"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Publshr_Book", FK_COLUMNS="Publshr_Id" */
+    IF EXISTS (SELECT * FROM deleted,Publshr
+      WHERE
+        /* %JoinFKPK(deleted,Publshr," = "," AND") */
+        deleted.Publshr_Id = Publshr.Publshr_Id AND
+        NOT EXISTS (
+          SELECT * FROM Book
+          WHERE
+            /* %JoinFKPK(Book,Publshr," = "," AND") */
+            Book.Publshr_Id = Publshr.Publshr_Id
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last Book because Publshr exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Book ON Book FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Book */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insBook_Id char(9),
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* Book  BookAuthor on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00049d3e", PARENT_OWNER="", PARENT_TABLE="Book"
+    CHILD_OWNER="", CHILD_TABLE="BookAuthor"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Book_BookAuthor", FK_COLUMNS="Book_Id" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Book_Id)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,BookAuthor
+      WHERE
+        /*  %JoinFKPK(BookAuthor,deleted," = "," AND") */
+        BookAuthor.Book_Id = deleted.Book_Id
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update Book because BookAuthor exists.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* Book  Book_YTD_Sls on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Book"
+    CHILD_OWNER="", CHILD_TABLE="Book_YTD_Sls"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Book_Book_YTD_Sls", FK_COLUMNS="Book_Id" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Book_Id)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,Book_YTD_Sls
+      WHERE
+        /*  %JoinFKPK(Book_YTD_Sls,deleted," = "," AND") */
+        Book_YTD_Sls.Book_Id = deleted.Book_Id
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update Book because Book_YTD_Sls exists.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* Book  Ordr_Itm on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Book"
+    CHILD_OWNER="", CHILD_TABLE="Ordr_Itm"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Book_Ordr_Itm", FK_COLUMNS="Book_Id" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Book_Id)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,Ordr_Itm
+      WHERE
+        /*  %JoinFKPK(Ordr_Itm,deleted," = "," AND") */
+        Ordr_Itm.Book_Id = deleted.Book_Id
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update Book because Ordr_Itm exists.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* Publshr  Book on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Publshr"
+    CHILD_OWNER="", CHILD_TABLE="Book"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Publshr_Book", FK_COLUMNS="Publshr_Id" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Publshr_Id)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,Publshr
+        WHERE
+          /* %JoinFKPK(inserted,Publshr) */
+          inserted.Publshr_Id = Publshr.Publshr_Id
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    select @nullcnt = count(*) from inserted where
+      inserted.Publshr_Id IS NULL
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update Book because Publshr does not exist.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_Ordr_Itm ON Ordr_Itm FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Ordr_Itm */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* Ordr_Itm  Ordr_Ship on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="0006bca3", PARENT_OWNER="", PARENT_TABLE="Ordr_Itm"
+    CHILD_OWNER="", CHILD_TABLE="Ordr_Ship"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Ordr_Itm_Ordr_Ship", FK_COLUMNS="Ordr_Nbr""Itm_Seq_Nbr" */
+    IF EXISTS (
+      SELECT * FROM deleted,Ordr_Ship
+      WHERE
+        /*  %JoinFKPK(Ordr_Ship,deleted," = "," AND") */
+        Ordr_Ship.Ordr_Nbr = deleted.Ordr_Nbr AND
+        Ordr_Ship.Itm_Seq_Nbr = deleted.Itm_Seq_Nbr
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete Ordr_Itm because Ordr_Ship exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* Ordr_Itm  Book_Retrun on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Ordr_Itm"
+    CHILD_OWNER="", CHILD_TABLE="Book_Retrun"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Ordr_Itm_Book_Retrun", FK_COLUMNS="Ordr_Nbr""Itm_Seq_Nbr" */
+    IF EXISTS (
+      SELECT * FROM deleted,Book_Retrun
+      WHERE
+        /*  %JoinFKPK(Book_Retrun,deleted," = "," AND") */
+        Book_Retrun.Ordr_Nbr = deleted.Ordr_Nbr AND
+        Book_Retrun.Itm_Seq_Nbr = deleted.Itm_Seq_Nbr
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete Ordr_Itm because Book_Retrun exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* Ordr_Itm  Rylty_Hist on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Ordr_Itm"
+    CHILD_OWNER="", CHILD_TABLE="Rylty_Hist"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Ordr_Itm_Rylty_Hist", FK_COLUMNS="Ordr_Nbr""Itm_Seq_Nbr" */
+    IF EXISTS (
+      SELECT * FROM deleted,Rylty_Hist
+      WHERE
+        /*  %JoinFKPK(Rylty_Hist,deleted," = "," AND") */
+        Rylty_Hist.Ordr_Nbr = deleted.Ordr_Nbr AND
+        Rylty_Hist.Itm_Seq_Nbr = deleted.Itm_Seq_Nbr
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete Ordr_Itm because Rylty_Hist exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* Book  Ordr_Itm on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Book"
+    CHILD_OWNER="", CHILD_TABLE="Ordr_Itm"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Book_Ordr_Itm", FK_COLUMNS="Book_Id" */
+    IF EXISTS (SELECT * FROM deleted,Book
+      WHERE
+        /* %JoinFKPK(deleted,Book," = "," AND") */
+        deleted.Book_Id = Book.Book_Id AND
+        NOT EXISTS (
+          SELECT * FROM Ordr_Itm
+          WHERE
+            /* %JoinFKPK(Ordr_Itm,Book," = "," AND") */
+            Ordr_Itm.Book_Id = Book.Book_Id
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last Ordr_Itm because Book exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* Disc  Ordr_Itm on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Disc"
+    CHILD_OWNER="", CHILD_TABLE="Ordr_Itm"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Disc_Ordr_Itm", FK_COLUMNS="Disc_Typ" */
+    IF EXISTS (SELECT * FROM deleted,Disc
+      WHERE
+        /* %JoinFKPK(deleted,Disc," = "," AND") */
+        deleted.Disc_Typ = Disc.Disc_Typ AND
+        NOT EXISTS (
+          SELECT * FROM Ordr_Itm
+          WHERE
+            /* %JoinFKPK(Ordr_Itm,Disc," = "," AND") */
+            Ordr_Itm.Disc_Typ = Disc.Disc_Typ
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last Ordr_Itm because Disc exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* Purchase_Ordr  Ordr_Itm on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Purchase_Ordr"
+    CHILD_OWNER="", CHILD_TABLE="Ordr_Itm"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Purchase_Ordr_Ordr_Itm", FK_COLUMNS="Ordr_Nbr" */
+    IF EXISTS (SELECT * FROM deleted,Purchase_Ordr
+      WHERE
+        /* %JoinFKPK(deleted,Purchase_Ordr," = "," AND") */
+        deleted.Ordr_Nbr = Purchase_Ordr.Ordr_Nbr AND
+        NOT EXISTS (
+          SELECT * FROM Ordr_Itm
+          WHERE
+            /* %JoinFKPK(Ordr_Itm,Purchase_Ordr," = "," AND") */
+            Ordr_Itm.Ordr_Nbr = Purchase_Ordr.Ordr_Nbr
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last Ordr_Itm because Purchase_Ordr exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Ordr_Itm ON Ordr_Itm FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Ordr_Itm */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insOrdr_Nbr bit, 
+           @insItm_Seq_Nbr int,
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* Ordr_Itm  Ordr_Ship on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="0007c5e5", PARENT_OWNER="", PARENT_TABLE="Ordr_Itm"
+    CHILD_OWNER="", CHILD_TABLE="Ordr_Ship"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Ordr_Itm_Ordr_Ship", FK_COLUMNS="Ordr_Nbr""Itm_Seq_Nbr" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Ordr_Nbr) OR
+    UPDATE(Itm_Seq_Nbr)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,Ordr_Ship
+      WHERE
+        /*  %JoinFKPK(Ordr_Ship,deleted," = "," AND") */
+        Ordr_Ship.Ordr_Nbr = deleted.Ordr_Nbr AND
+        Ordr_Ship.Itm_Seq_Nbr = deleted.Itm_Seq_Nbr
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update Ordr_Itm because Ordr_Ship exists.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* Ordr_Itm  Book_Retrun on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Ordr_Itm"
+    CHILD_OWNER="", CHILD_TABLE="Book_Retrun"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Ordr_Itm_Book_Retrun", FK_COLUMNS="Ordr_Nbr""Itm_Seq_Nbr" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Ordr_Nbr) OR
+    UPDATE(Itm_Seq_Nbr)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,Book_Retrun
+      WHERE
+        /*  %JoinFKPK(Book_Retrun,deleted," = "," AND") */
+        Book_Retrun.Ordr_Nbr = deleted.Ordr_Nbr AND
+        Book_Retrun.Itm_Seq_Nbr = deleted.Itm_Seq_Nbr
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update Ordr_Itm because Book_Retrun exists.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* Ordr_Itm  Rylty_Hist on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Ordr_Itm"
+    CHILD_OWNER="", CHILD_TABLE="Rylty_Hist"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Ordr_Itm_Rylty_Hist", FK_COLUMNS="Ordr_Nbr""Itm_Seq_Nbr" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Ordr_Nbr) OR
+    UPDATE(Itm_Seq_Nbr)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,Rylty_Hist
+      WHERE
+        /*  %JoinFKPK(Rylty_Hist,deleted," = "," AND") */
+        Rylty_Hist.Ordr_Nbr = deleted.Ordr_Nbr AND
+        Rylty_Hist.Itm_Seq_Nbr = deleted.Itm_Seq_Nbr
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update Ordr_Itm because Rylty_Hist exists.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* Book  Ordr_Itm on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Book"
+    CHILD_OWNER="", CHILD_TABLE="Ordr_Itm"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Book_Ordr_Itm", FK_COLUMNS="Book_Id" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Book_Id)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,Book
+        WHERE
+          /* %JoinFKPK(inserted,Book) */
+          inserted.Book_Id = Book.Book_Id
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update Ordr_Itm because Book does not exist.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* Disc  Ordr_Itm on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Disc"
+    CHILD_OWNER="", CHILD_TABLE="Ordr_Itm"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Disc_Ordr_Itm", FK_COLUMNS="Disc_Typ" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Disc_Typ)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,Disc
+        WHERE
+          /* %JoinFKPK(inserted,Disc) */
+          inserted.Disc_Typ = Disc.Disc_Typ
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    select @nullcnt = count(*) from inserted where
+      inserted.Disc_Typ IS NULL
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update Ordr_Itm because Disc does not exist.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* Purchase_Ordr  Ordr_Itm on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Purchase_Ordr"
+    CHILD_OWNER="", CHILD_TABLE="Ordr_Itm"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Purchase_Ordr_Ordr_Itm", FK_COLUMNS="Ordr_Nbr" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Ordr_Nbr)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,Purchase_Ordr
+        WHERE
+          /* %JoinFKPK(inserted,Purchase_Ordr) */
+          inserted.Ordr_Nbr = Purchase_Ordr.Ordr_Nbr
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update Ordr_Itm because Purchase_Ordr does not exist.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_Rylty_Pmt ON Rylty_Pmt FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Rylty_Pmt */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* BookAuthor  Rylty_Pmt on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00029c24", PARENT_OWNER="", PARENT_TABLE="BookAuthor"
+    CHILD_OWNER="", CHILD_TABLE="Rylty_Pmt"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_BookAuthor_Rylty_Pmt", FK_COLUMNS="Auth_Id""Book_Id" */
+    IF EXISTS (SELECT * FROM deleted,BookAuthor
+      WHERE
+        /* %JoinFKPK(deleted,BookAuthor," = "," AND") */
+        deleted.Auth_Id = BookAuthor.Auth_Id AND
+        deleted.Book_Id = BookAuthor.Book_Id AND
+        NOT EXISTS (
+          SELECT * FROM Rylty_Pmt
+          WHERE
+            /* %JoinFKPK(Rylty_Pmt,BookAuthor," = "," AND") */
+            Rylty_Pmt.Auth_Id = BookAuthor.Auth_Id AND
+            Rylty_Pmt.Book_Id = BookAuthor.Book_Id
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last Rylty_Pmt because BookAuthor exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* Rylty  Rylty_Pmt on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Rylty"
+    CHILD_OWNER="", CHILD_TABLE="Rylty_Pmt"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Rylty_Rylty_Pmt", FK_COLUMNS="Rylty_Id" */
+    IF EXISTS (SELECT * FROM deleted,Rylty
+      WHERE
+        /* %JoinFKPK(deleted,Rylty," = "," AND") */
+        deleted.Rylty_Id = Rylty.Rylty_Id AND
+        NOT EXISTS (
+          SELECT * FROM Rylty_Pmt
+          WHERE
+            /* %JoinFKPK(Rylty_Pmt,Rylty," = "," AND") */
+            Rylty_Pmt.Rylty_Id = Rylty.Rylty_Id
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last Rylty_Pmt because Rylty exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Rylty_Pmt ON Rylty_Pmt FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Rylty_Pmt */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insAuth_Id char(9), 
+           @insBook_Id char(9), 
+           @insRylty_Id char(9),
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* BookAuthor  Rylty_Pmt on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="0002ca55", PARENT_OWNER="", PARENT_TABLE="BookAuthor"
+    CHILD_OWNER="", CHILD_TABLE="Rylty_Pmt"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_BookAuthor_Rylty_Pmt", FK_COLUMNS="Auth_Id""Book_Id" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Auth_Id) OR
+    UPDATE(Book_Id)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,BookAuthor
+        WHERE
+          /* %JoinFKPK(inserted,BookAuthor) */
+          inserted.Auth_Id = BookAuthor.Auth_Id and
+          inserted.Book_Id = BookAuthor.Book_Id
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update Rylty_Pmt because BookAuthor does not exist.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* Rylty  Rylty_Pmt on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Rylty"
+    CHILD_OWNER="", CHILD_TABLE="Rylty_Pmt"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Rylty_Rylty_Pmt", FK_COLUMNS="Rylty_Id" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Rylty_Id)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,Rylty
+        WHERE
+          /* %JoinFKPK(inserted,Rylty) */
+          inserted.Rylty_Id = Rylty.Rylty_Id
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update Rylty_Pmt because Rylty does not exist.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_Book_YTD_Sls ON Book_YTD_Sls FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Book_YTD_Sls */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* Book  Book_YTD_Sls on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00014902", PARENT_OWNER="", PARENT_TABLE="Book"
+    CHILD_OWNER="", CHILD_TABLE="Book_YTD_Sls"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Book_Book_YTD_Sls", FK_COLUMNS="Book_Id" */
+    IF EXISTS (SELECT * FROM deleted,Book
+      WHERE
+        /* %JoinFKPK(deleted,Book," = "," AND") */
+        deleted.Book_Id = Book.Book_Id AND
+        NOT EXISTS (
+          SELECT * FROM Book_YTD_Sls
+          WHERE
+            /* %JoinFKPK(Book_YTD_Sls,Book," = "," AND") */
+            Book_YTD_Sls.Book_Id = Book.Book_Id
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last Book_YTD_Sls because Book exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Book_YTD_Sls ON Book_YTD_Sls FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Book_YTD_Sls */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insBook_Id char(9),
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* Book  Book_YTD_Sls on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="00015bbd", PARENT_OWNER="", PARENT_TABLE="Book"
+    CHILD_OWNER="", CHILD_TABLE="Book_YTD_Sls"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Book_Book_YTD_Sls", FK_COLUMNS="Book_Id" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Book_Id)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,Book
+        WHERE
+          /* %JoinFKPK(inserted,Book) */
+          inserted.Book_Id = Book.Book_Id
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update Book_YTD_Sls because Book does not exist.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_Rylty_Hist ON Rylty_Hist FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Rylty_Hist */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* Ordr_Itm  Rylty_Hist on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00017dcc", PARENT_OWNER="", PARENT_TABLE="Ordr_Itm"
+    CHILD_OWNER="", CHILD_TABLE="Rylty_Hist"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Ordr_Itm_Rylty_Hist", FK_COLUMNS="Ordr_Nbr""Itm_Seq_Nbr" */
+    IF EXISTS (SELECT * FROM deleted,Ordr_Itm
+      WHERE
+        /* %JoinFKPK(deleted,Ordr_Itm," = "," AND") */
+        deleted.Ordr_Nbr = Ordr_Itm.Ordr_Nbr AND
+        deleted.Itm_Seq_Nbr = Ordr_Itm.Itm_Seq_Nbr AND
+        NOT EXISTS (
+          SELECT * FROM Rylty_Hist
+          WHERE
+            /* %JoinFKPK(Rylty_Hist,Ordr_Itm," = "," AND") */
+            Rylty_Hist.Ordr_Nbr = Ordr_Itm.Ordr_Nbr AND
+            Rylty_Hist.Itm_Seq_Nbr = Ordr_Itm.Itm_Seq_Nbr
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last Rylty_Hist because Ordr_Itm exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Rylty_Hist ON Rylty_Hist FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Rylty_Hist */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insRylty_Hist_Id char(9),
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* Ordr_Itm  Rylty_Hist on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="0001bcd9", PARENT_OWNER="", PARENT_TABLE="Ordr_Itm"
+    CHILD_OWNER="", CHILD_TABLE="Rylty_Hist"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Ordr_Itm_Rylty_Hist", FK_COLUMNS="Ordr_Nbr""Itm_Seq_Nbr" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Ordr_Nbr) OR
+    UPDATE(Itm_Seq_Nbr)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,Ordr_Itm
+        WHERE
+          /* %JoinFKPK(inserted,Ordr_Itm) */
+          inserted.Ordr_Nbr = Ordr_Itm.Ordr_Nbr and
+          inserted.Itm_Seq_Nbr = Ordr_Itm.Itm_Seq_Nbr
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    select @nullcnt = count(*) from inserted where
+      inserted.Ordr_Nbr IS NULL AND
+      inserted.Itm_Seq_Nbr IS NULL
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update Rylty_Hist because Ordr_Itm does not exist.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_Reporting_Structure ON Reporting_Structure FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Reporting_Structure */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* Emp  Reporting_Structure on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00027830", PARENT_OWNER="", PARENT_TABLE="Emp"
+    CHILD_OWNER="", CHILD_TABLE="Reporting_Structure"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Employee_ReportTo", FK_COLUMNS="Rpt_To" */
+    IF EXISTS (SELECT * FROM deleted,Emp
+      WHERE
+        /* %JoinFKPK(deleted,Emp," = "," AND") */
+        deleted.Rpt_To = Emp.Emp_Id AND
+        NOT EXISTS (
+          SELECT * FROM Reporting_Structure
+          WHERE
+            /* %JoinFKPK(Reporting_Structure,Emp," = "," AND") */
+            Reporting_Structure.Rpt_To = Emp.Emp_Id
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last Reporting_Structure because Emp exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* Emp  Reporting_Structure on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Emp"
+    CHILD_OWNER="", CHILD_TABLE="Reporting_Structure"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Employee_Manager", FK_COLUMNS="Mngr" */
+    IF EXISTS (SELECT * FROM deleted,Emp
+      WHERE
+        /* %JoinFKPK(deleted,Emp," = "," AND") */
+        deleted.Mngr = Emp.Emp_Id AND
+        NOT EXISTS (
+          SELECT * FROM Reporting_Structure
+          WHERE
+            /* %JoinFKPK(Reporting_Structure,Emp," = "," AND") */
+            Reporting_Structure.Mngr = Emp.Emp_Id
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last Reporting_Structure because Emp exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Reporting_Structure ON Reporting_Structure FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Reporting_Structure */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insMngr char(9), 
+           @insRpt_To char(9),
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* Emp  Reporting_Structure on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="0002ab15", PARENT_OWNER="", PARENT_TABLE="Emp"
+    CHILD_OWNER="", CHILD_TABLE="Reporting_Structure"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Employee_ReportTo", FK_COLUMNS="Rpt_To" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Rpt_To)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,Emp
+        WHERE
+          /* %JoinFKPK(inserted,Emp) */
+          inserted.Rpt_To = Emp.Emp_Id
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update Reporting_Structure because Emp does not exist.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* Emp  Reporting_Structure on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Emp"
+    CHILD_OWNER="", CHILD_TABLE="Reporting_Structure"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Employee_Manager", FK_COLUMNS="Mngr" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Mngr)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,Emp
+        WHERE
+          /* %JoinFKPK(inserted,Emp) */
+          inserted.Mngr = Emp.Emp_Id
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update Reporting_Structure because Emp does not exist.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_Cust ON Cust FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Cust */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* Cust  Purchase_Ordr on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00011bba", PARENT_OWNER="", PARENT_TABLE="Cust"
+    CHILD_OWNER="", CHILD_TABLE="Purchase_Ordr"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Cust_Purchase_Ordr", FK_COLUMNS="Cust_Id" */
+    IF EXISTS (
+      SELECT * FROM deleted,Purchase_Ordr
+      WHERE
+        /*  %JoinFKPK(Purchase_Ordr,deleted," = "," AND") */
+        Purchase_Ordr.Cust_Id = deleted.Cust_Id
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete Cust because Purchase_Ordr exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Cust ON Cust FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Cust */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insCust_Id char(9),
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* Cust  Purchase_Ordr on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00012e04", PARENT_OWNER="", PARENT_TABLE="Cust"
+    CHILD_OWNER="", CHILD_TABLE="Purchase_Ordr"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Cust_Purchase_Ordr", FK_COLUMNS="Cust_Id" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Cust_Id)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,Purchase_Ordr
+      WHERE
+        /*  %JoinFKPK(Purchase_Ordr,deleted," = "," AND") */
+        Purchase_Ordr.Cust_Id = deleted.Cust_Id
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update Cust because Purchase_Ordr exists.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_Book_Retrun ON Book_Retrun FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Book_Retrun */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* Ordr_Itm  Book_Retrun on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00017bc4", PARENT_OWNER="", PARENT_TABLE="Ordr_Itm"
+    CHILD_OWNER="", CHILD_TABLE="Book_Retrun"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Ordr_Itm_Book_Retrun", FK_COLUMNS="Ordr_Nbr""Itm_Seq_Nbr" */
+    IF EXISTS (SELECT * FROM deleted,Ordr_Itm
+      WHERE
+        /* %JoinFKPK(deleted,Ordr_Itm," = "," AND") */
+        deleted.Ordr_Nbr = Ordr_Itm.Ordr_Nbr AND
+        deleted.Itm_Seq_Nbr = Ordr_Itm.Itm_Seq_Nbr AND
+        NOT EXISTS (
+          SELECT * FROM Book_Retrun
+          WHERE
+            /* %JoinFKPK(Book_Retrun,Ordr_Itm," = "," AND") */
+            Book_Retrun.Ordr_Nbr = Ordr_Itm.Ordr_Nbr AND
+            Book_Retrun.Itm_Seq_Nbr = Ordr_Itm.Itm_Seq_Nbr
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last Book_Retrun because Ordr_Itm exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Book_Retrun ON Book_Retrun FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Book_Retrun */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insBook_Rtrn_Id char(9),
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* Ordr_Itm  Book_Retrun on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="0001c6a8", PARENT_OWNER="", PARENT_TABLE="Ordr_Itm"
+    CHILD_OWNER="", CHILD_TABLE="Book_Retrun"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Ordr_Itm_Book_Retrun", FK_COLUMNS="Ordr_Nbr""Itm_Seq_Nbr" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Ordr_Nbr) OR
+    UPDATE(Itm_Seq_Nbr)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,Ordr_Itm
+        WHERE
+          /* %JoinFKPK(inserted,Ordr_Itm) */
+          inserted.Ordr_Nbr = Ordr_Itm.Ordr_Nbr and
+          inserted.Itm_Seq_Nbr = Ordr_Itm.Itm_Seq_Nbr
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    select @nullcnt = count(*) from inserted where
+      inserted.Ordr_Nbr IS NULL AND
+      inserted.Itm_Seq_Nbr IS NULL
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update Book_Retrun because Ordr_Itm does not exist.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_Crd_Card ON Crd_Card FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Crd_Card */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* Crd_Card  Crd_Chk on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00010793", PARENT_OWNER="", PARENT_TABLE="Crd_Card"
+    CHILD_OWNER="", CHILD_TABLE="Crd_Chk"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Crd_Card_Crd_Chk", FK_COLUMNS="Pmt_Nbr" */
+    IF EXISTS (
+      SELECT * FROM deleted,Crd_Chk
+      WHERE
+        /*  %JoinFKPK(Crd_Chk,deleted," = "," AND") */
+        Crd_Chk.Pmt_Nbr = deleted.Pmt_Nbr
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete Crd_Card because Crd_Chk exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Crd_Card ON Crd_Card FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Crd_Card */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insPmt_Nbr int,
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* Crd_Card  Crd_Chk on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00012b46", PARENT_OWNER="", PARENT_TABLE="Crd_Card"
+    CHILD_OWNER="", CHILD_TABLE="Crd_Chk"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Crd_Card_Crd_Chk", FK_COLUMNS="Pmt_Nbr" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Pmt_Nbr)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,Crd_Chk
+      WHERE
+        /*  %JoinFKPK(Crd_Chk,deleted," = "," AND") */
+        Crd_Chk.Pmt_Nbr = deleted.Pmt_Nbr
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update Crd_Card because Crd_Chk exists.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_Pmt ON Pmt FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Pmt */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* Pmt  Personal_Chk on parent delete cascade */
+    /* ERWIN_RELATION:CHECKSUM="00027473", PARENT_OWNER="", PARENT_TABLE="Pmt"
+    CHILD_OWNER="", CHILD_TABLE="Personal_Chk"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Pmt_Personal_Chk", FK_COLUMNS="Pmt_Nbr" */
+    DELETE Personal_Chk
+      FROM Personal_Chk,deleted
+      WHERE
+        /*  %JoinFKPK(Personal_Chk,deleted," = "," AND") */
+        Personal_Chk.Pmt_Nbr = deleted.Pmt_Nbr
+
+    /* erwin Builtin Trigger */
+    /* Pmt  Mony_Ordr on parent delete cascade */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Pmt"
+    CHILD_OWNER="", CHILD_TABLE="Mony_Ordr"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Pmt_Mony_Ordr", FK_COLUMNS="Pmt_Nbr" */
+    DELETE Mony_Ordr
+      FROM Mony_Ordr,deleted
+      WHERE
+        /*  %JoinFKPK(Mony_Ordr,deleted," = "," AND") */
+        Mony_Ordr.Pmt_Nbr = deleted.Pmt_Nbr
+
+    /* erwin Builtin Trigger */
+    /* Pmt  Crd_Card on parent delete cascade */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Pmt"
+    CHILD_OWNER="", CHILD_TABLE="Crd_Card"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Pmt_Crd_Card", FK_COLUMNS="Pmt_Nbr" */
+    DELETE Crd_Card
+      FROM Crd_Card,deleted
+      WHERE
+        /*  %JoinFKPK(Crd_Card,deleted," = "," AND") */
+        Crd_Card.Pmt_Nbr = deleted.Pmt_Nbr
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Pmt ON Pmt FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Pmt */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insPmt_Nbr int,
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* Pmt  Personal_Chk on parent update cascade */
+  /* ERWIN_RELATION:CHECKSUM="00043e2a", PARENT_OWNER="", PARENT_TABLE="Pmt"
+    CHILD_OWNER="", CHILD_TABLE="Personal_Chk"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Pmt_Personal_Chk", FK_COLUMNS="Pmt_Nbr" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Pmt_Nbr)
+  BEGIN
+    IF @numrows = 1
+    BEGIN
+      SELECT @insPmt_Nbr = inserted.Pmt_Nbr
+        FROM inserted
+      UPDATE Personal_Chk
+      SET
+        /*  %JoinFKPK(Personal_Chk,@ins," = ",",") */
+        Personal_Chk.Pmt_Nbr = @insPmt_Nbr
+      FROM Personal_Chk,inserted,deleted
+      WHERE
+        /*  %JoinFKPK(Personal_Chk,deleted," = "," AND") */
+        Personal_Chk.Pmt_Nbr = deleted.Pmt_Nbr
+    END
+    ELSE
+    BEGIN
+      SELECT @errno = 30006,
+             @errmsg = 'Cannot cascade Pmt update because more than one row has been affected.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* Pmt  Mony_Ordr on parent update cascade */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Pmt"
+    CHILD_OWNER="", CHILD_TABLE="Mony_Ordr"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Pmt_Mony_Ordr", FK_COLUMNS="Pmt_Nbr" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Pmt_Nbr)
+  BEGIN
+    IF @numrows = 1
+    BEGIN
+      SELECT @insPmt_Nbr = inserted.Pmt_Nbr
+        FROM inserted
+      UPDATE Mony_Ordr
+      SET
+        /*  %JoinFKPK(Mony_Ordr,@ins," = ",",") */
+        Mony_Ordr.Pmt_Nbr = @insPmt_Nbr
+      FROM Mony_Ordr,inserted,deleted
+      WHERE
+        /*  %JoinFKPK(Mony_Ordr,deleted," = "," AND") */
+        Mony_Ordr.Pmt_Nbr = deleted.Pmt_Nbr
+    END
+    ELSE
+    BEGIN
+      SELECT @errno = 30006,
+             @errmsg = 'Cannot cascade Pmt update because more than one row has been affected.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* Pmt  Crd_Card on parent update cascade */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Pmt"
+    CHILD_OWNER="", CHILD_TABLE="Crd_Card"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Pmt_Crd_Card", FK_COLUMNS="Pmt_Nbr" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Pmt_Nbr)
+  BEGIN
+    IF @numrows = 1
+    BEGIN
+      SELECT @insPmt_Nbr = inserted.Pmt_Nbr
+        FROM inserted
+      UPDATE Crd_Card
+      SET
+        /*  %JoinFKPK(Crd_Card,@ins," = ",",") */
+        Crd_Card.Pmt_Nbr = @insPmt_Nbr
+      FROM Crd_Card,inserted,deleted
+      WHERE
+        /*  %JoinFKPK(Crd_Card,deleted," = "," AND") */
+        Crd_Card.Pmt_Nbr = deleted.Pmt_Nbr
+    END
+    ELSE
+    BEGIN
+      SELECT @errno = 30006,
+             @errmsg = 'Cannot cascade Pmt update because more than one row has been affected.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_Rgn ON Rgn FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Rgn */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* Rgn  Stor_Nam on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00010bad", PARENT_OWNER="", PARENT_TABLE="Rgn"
+    CHILD_OWNER="", CHILD_TABLE="Stor_Nam"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Rgn_Stor_Nam", FK_COLUMNS="Rgn_Id" */
+    IF EXISTS (
+      SELECT * FROM deleted,Stor_Nam
+      WHERE
+        /*  %JoinFKPK(Stor_Nam,deleted," = "," AND") */
+        Stor_Nam.Rgn_Id = deleted.Rgn_Id
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete Rgn because Stor_Nam exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Rgn ON Rgn FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Rgn */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insRgn_Id char(9),
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* Rgn  Stor_Nam on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00012189", PARENT_OWNER="", PARENT_TABLE="Rgn"
+    CHILD_OWNER="", CHILD_TABLE="Stor_Nam"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Rgn_Stor_Nam", FK_COLUMNS="Rgn_Id" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Rgn_Id)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,Stor_Nam
+      WHERE
+        /*  %JoinFKPK(Stor_Nam,deleted," = "," AND") */
+        Stor_Nam.Rgn_Id = deleted.Rgn_Id
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update Rgn because Stor_Nam exists.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_Ordr_Ship ON Ordr_Ship FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Ordr_Ship */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* Ordr_Ship  Bk_Ordr on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="0002aa0b", PARENT_OWNER="", PARENT_TABLE="Ordr_Ship"
+    CHILD_OWNER="", CHILD_TABLE="Bk_Ordr"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Ordr_Ship_Bk_Ordr", FK_COLUMNS="Ordr_Ship_Id""Ordr_Nbr""Itm_Seq_Nbr" */
+    IF EXISTS (
+      SELECT * FROM deleted,Bk_Ordr
+      WHERE
+        /*  %JoinFKPK(Bk_Ordr,deleted," = "," AND") */
+        Bk_Ordr.Ordr_Ship_Id = deleted.Ordr_Ship_Id AND
+        Bk_Ordr.Ordr_Nbr = deleted.Ordr_Nbr AND
+        Bk_Ordr.Itm_Seq_Nbr = deleted.Itm_Seq_Nbr
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete Ordr_Ship because Bk_Ordr exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* Ordr_Itm  Ordr_Ship on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Ordr_Itm"
+    CHILD_OWNER="", CHILD_TABLE="Ordr_Ship"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Ordr_Itm_Ordr_Ship", FK_COLUMNS="Ordr_Nbr""Itm_Seq_Nbr" */
+    IF EXISTS (SELECT * FROM deleted,Ordr_Itm
+      WHERE
+        /* %JoinFKPK(deleted,Ordr_Itm," = "," AND") */
+        deleted.Ordr_Nbr = Ordr_Itm.Ordr_Nbr AND
+        deleted.Itm_Seq_Nbr = Ordr_Itm.Itm_Seq_Nbr AND
+        NOT EXISTS (
+          SELECT * FROM Ordr_Ship
+          WHERE
+            /* %JoinFKPK(Ordr_Ship,Ordr_Itm," = "," AND") */
+            Ordr_Ship.Ordr_Nbr = Ordr_Itm.Ordr_Nbr AND
+            Ordr_Ship.Itm_Seq_Nbr = Ordr_Itm.Itm_Seq_Nbr
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last Ordr_Ship because Ordr_Itm exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Ordr_Ship ON Ordr_Ship FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Ordr_Ship */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insOrdr_Ship_Id char(9), 
+           @insOrdr_Nbr bit, 
+           @insItm_Seq_Nbr bit,
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* Ordr_Ship  Bk_Ordr on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="0002eac2", PARENT_OWNER="", PARENT_TABLE="Ordr_Ship"
+    CHILD_OWNER="", CHILD_TABLE="Bk_Ordr"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Ordr_Ship_Bk_Ordr", FK_COLUMNS="Ordr_Ship_Id""Ordr_Nbr""Itm_Seq_Nbr" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Ordr_Ship_Id) OR
+    UPDATE(Ordr_Nbr) OR
+    UPDATE(Itm_Seq_Nbr)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,Bk_Ordr
+      WHERE
+        /*  %JoinFKPK(Bk_Ordr,deleted," = "," AND") */
+        Bk_Ordr.Ordr_Ship_Id = deleted.Ordr_Ship_Id AND
+        Bk_Ordr.Ordr_Nbr = deleted.Ordr_Nbr AND
+        Bk_Ordr.Itm_Seq_Nbr = deleted.Itm_Seq_Nbr
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update Ordr_Ship because Bk_Ordr exists.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* Ordr_Itm  Ordr_Ship on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Ordr_Itm"
+    CHILD_OWNER="", CHILD_TABLE="Ordr_Ship"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Ordr_Itm_Ordr_Ship", FK_COLUMNS="Ordr_Nbr""Itm_Seq_Nbr" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Ordr_Nbr) OR
+    UPDATE(Itm_Seq_Nbr)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,Ordr_Itm
+        WHERE
+          /* %JoinFKPK(inserted,Ordr_Itm) */
+          inserted.Ordr_Nbr = Ordr_Itm.Ordr_Nbr and
+          inserted.Itm_Seq_Nbr = Ordr_Itm.Itm_Seq_Nbr
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update Ordr_Ship because Ordr_Itm does not exist.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_Bk_Ordr ON Bk_Ordr FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Bk_Ordr */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* Ordr_Ship  Bk_Ordr on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="0001c273", PARENT_OWNER="", PARENT_TABLE="Ordr_Ship"
+    CHILD_OWNER="", CHILD_TABLE="Bk_Ordr"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Ordr_Ship_Bk_Ordr", FK_COLUMNS="Ordr_Ship_Id""Ordr_Nbr""Itm_Seq_Nbr" */
+    IF EXISTS (SELECT * FROM deleted,Ordr_Ship
+      WHERE
+        /* %JoinFKPK(deleted,Ordr_Ship," = "," AND") */
+        deleted.Ordr_Ship_Id = Ordr_Ship.Ordr_Ship_Id AND
+        deleted.Ordr_Nbr = Ordr_Ship.Ordr_Nbr AND
+        deleted.Itm_Seq_Nbr = Ordr_Ship.Itm_Seq_Nbr AND
+        NOT EXISTS (
+          SELECT * FROM Bk_Ordr
+          WHERE
+            /* %JoinFKPK(Bk_Ordr,Ordr_Ship," = "," AND") */
+            Bk_Ordr.Ordr_Ship_Id = Ordr_Ship.Ordr_Ship_Id AND
+            Bk_Ordr.Ordr_Nbr = Ordr_Ship.Ordr_Nbr AND
+            Bk_Ordr.Itm_Seq_Nbr = Ordr_Ship.Itm_Seq_Nbr
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last Bk_Ordr because Ordr_Ship exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Bk_Ordr ON Bk_Ordr FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Bk_Ordr */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insOrdr_Ship_Id char(9), 
+           @insOrdr_Nbr bit, 
+           @insItm_Seq_Nbr bit,
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* Ordr_Ship  Bk_Ordr on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="0001ba61", PARENT_OWNER="", PARENT_TABLE="Ordr_Ship"
+    CHILD_OWNER="", CHILD_TABLE="Bk_Ordr"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Ordr_Ship_Bk_Ordr", FK_COLUMNS="Ordr_Ship_Id""Ordr_Nbr""Itm_Seq_Nbr" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Ordr_Ship_Id) OR
+    UPDATE(Ordr_Nbr) OR
+    UPDATE(Itm_Seq_Nbr)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,Ordr_Ship
+        WHERE
+          /* %JoinFKPK(inserted,Ordr_Ship) */
+          inserted.Ordr_Ship_Id = Ordr_Ship.Ordr_Ship_Id and
+          inserted.Ordr_Nbr = Ordr_Ship.Ordr_Nbr and
+          inserted.Itm_Seq_Nbr = Ordr_Ship.Itm_Seq_Nbr
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update Bk_Ordr because Ordr_Ship does not exist.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_Crd_Chk ON Crd_Chk FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on Crd_Chk */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* Crd_Card  Crd_Chk on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00014501", PARENT_OWNER="", PARENT_TABLE="Crd_Card"
+    CHILD_OWNER="", CHILD_TABLE="Crd_Chk"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Crd_Card_Crd_Chk", FK_COLUMNS="Pmt_Nbr" */
+    IF EXISTS (SELECT * FROM deleted,Crd_Card
+      WHERE
+        /* %JoinFKPK(deleted,Crd_Card," = "," AND") */
+        deleted.Pmt_Nbr = Crd_Card.Pmt_Nbr AND
+        NOT EXISTS (
+          SELECT * FROM Crd_Chk
+          WHERE
+            /* %JoinFKPK(Crd_Chk,Crd_Card," = "," AND") */
+            Crd_Chk.Pmt_Nbr = Crd_Card.Pmt_Nbr
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last Crd_Chk because Crd_Card exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_Crd_Chk ON Crd_Chk FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on Crd_Chk */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insCrd_Chk_Evnt CHAR(12),
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* Crd_Card  Crd_Chk on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="00016bed", PARENT_OWNER="", PARENT_TABLE="Crd_Card"
+    CHILD_OWNER="", CHILD_TABLE="Crd_Chk"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="FK_Crd_Card_Crd_Chk", FK_COLUMNS="Pmt_Nbr" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Pmt_Nbr)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,Crd_Card
+        WHERE
+          /* %JoinFKPK(inserted,Crd_Card) */
+          inserted.Pmt_Nbr = Crd_Card.Pmt_Nbr
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update Crd_Chk because Crd_Card does not exist.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
