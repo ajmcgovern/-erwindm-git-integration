@@ -1,0 +1,300 @@
+
+CREATE TABLE claim_loss_narrative
+(
+	Claim_Component_Reference varchar(250),
+	HashedBusinessKey bigint,
+	HashValue bigint,
+	lakeDeletedTimestamp timestamp,
+	lakelastupdatedate timestamp,
+	lakelastupdatetimestamp timestamp,
+	Loss_Narrative_1 varchar(250),
+	Loss_Narrative_2 varchar(250),
+	Loss_Narrative_3 varchar(250),
+	lakeValidToTimestamp timestamp,
+	lakeIsActive varchar(250),
+	sourceID bigint,
+	lakeCreatedDate timestamp,
+	lakeCreatedTimestamp timestamp,
+	lakeCreatedBatchID bigint,
+	lakeLastUpdatedBatchID bigint
+)
+USING delta
+LOCATION 'dbfs:/user/hive/warehouse/claim_loss_narrative'
+TBLPROPERTIES ('delta.minReaderVersion'='1','delta.minWriterVersion'='2');
+
+CREATE TABLE cust
+(
+	CUST_address string,
+	CUST_city string,
+	CUST_first_name string,
+	CUST_last_name string,
+	CUST_state string,
+	CUST_zip_code int,
+	email string,
+	CUST_number int
+)
+USING delta
+LOCATION 'dbfs:/user/hive/warehouse/cust'
+TBLPROPERTIES ('delta.minReaderVersion'='1','delta.minWriterVersion'='2');
+
+CREATE TABLE cust_credit
+(
+	credit_card int,
+	credit_card_exp int,
+	status_code string,
+	CUST_number int
+)
+USING delta
+LOCATION 'dbfs:/user/hive/warehouse/cust_credit'
+TBLPROPERTIES ('delta.minReaderVersion'='1','delta.minWriterVersion'='2');
+
+CREATE TABLE customers
+(
+	customerid string,
+	name string
+)
+USING delta
+LOCATION 'dbfs:/user/hive/warehouse/erwindb.db/customers'
+TBLPROPERTIES ('delta.minReaderVersion'='1','delta.minWriterVersion'='2');
+
+CREATE TABLE dba_db_links
+(
+	OWNER string,
+	DB_LINK string,
+	USERNAME string,
+	HOST string,
+	PORT string,
+	SID string
+)
+USING delta
+LOCATION 'dbfs:/user/hive/warehouse/dba_db_links'
+TBLPROPERTIES ('delta.checkpoint.writeStatsAsJson'='false','delta.checkpoint.writeStatsAsStruct'='true','delta.columnMapping.maxColumnId'='12','delta.columnMapping.mode'='name','delta.minReaderVersion'='2','delta.minWriterVersion'='5');
+
+CREATE TABLE dbo_scmmain
+(
+	lakeDeletedTimestamp varchar(250),
+	Lakelastupdatedate varchar(250),
+	Lakelastupdatetimestamp varchar(250),
+	lakevalidfromtimestamp varchar(250),
+	lakevalidtotimestamp varchar(250),
+	Loss_Narrative_1 varchar(250),
+	Loss_Narrative_2 varchar(250),
+	Loss_Narrative_3 varchar(250),
+	Trncgy varchar(250),
+	Trnid varchar(250)
+)
+USING delta
+LOCATION 'dbfs:/user/hive/warehouse/dbo_scmmain'
+TBLPROPERTIES ('delta.minReaderVersion'='1','delta.minWriterVersion'='2');
+
+CREATE TABLE dbo_scmmovt
+(
+	BPR varchar(250),
+	Dttm varchar(250),
+	Lakelastupdatedate varchar(250),
+	Lakelastupdatetimestamp varchar(250),
+	lakevalidfromtimestamp varchar(250),
+	lakevalidtotimestamp varchar(250),
+	Loss_Narrative_1 varchar(250),
+	Loss_Narrative_2 varchar(250),
+	Loss_Narrative_3 varchar(250)
+)
+USING delta
+LOCATION 'dbfs:/user/hive/warehouse/dbo_scmmovt'
+TBLPROPERTIES ('delta.minReaderVersion'='1','delta.minWriterVersion'='2');
+
+CREATE TABLE department
+(
+	deptno int,
+	deptname string
+)
+USING delta
+LOCATION 'dbfs:/user/hive/warehouse/department'
+TBLPROPERTIES ('delta.minReaderVersion'='1','delta.minWriterVersion'='2');
+
+CREATE EXTERNAL TABLE diamonds
+(
+	_c0 int,
+	carat double,
+	cut string,
+	color string,
+	clarity string,
+	depth double,
+	table double,
+	price int,
+	x double,
+	y double,
+	z double
+)
+USING CSV
+OPTIONS ('header'='true','inferSchema'='true')
+LOCATION 'dbfs:/databricks-datasets/Rdatasets/data-001/csv/ggplot2/diamonds.csv';
+
+CREATE TABLE e_1
+(
+	a tinyint
+)
+USING delta
+LOCATION 'dbfs:/user/hive/warehouse/e_1'
+TBLPROPERTIES ('delta.minReaderVersion'='1','delta.minWriterVersion'='2');
+
+CREATE TABLE newtable
+(
+	col1 tinyint,
+	pkCol tinyint
+)
+USING delta
+LOCATION 'dbfs:/user/hive/warehouse/newtable'
+TBLPROPERTIES ('delta.minReaderVersion'='1','delta.minWriterVersion'='2');
+
+CREATE TABLE parent
+(
+	pkCol tinyint
+)
+USING delta
+LOCATION 'dbfs:/user/hive/warehouse/parent'
+TBLPROPERTIES ('delta.minReaderVersion'='1','delta.minWriterVersion'='2');
+
+CREATE TABLE persons
+(
+	PersonID int,
+	LastName varchar(255),
+	FirstName varchar(255),
+	Address varchar(255),
+	City varchar(255)
+)
+USING delta
+LOCATION 'dbfs:/user/hive/warehouse/persons'
+TBLPROPERTIES ('delta.checkpoint.writeStatsAsJson'='false','delta.checkpoint.writeStatsAsStruct'='true','delta.minReaderVersion'='1','delta.minWriterVersion'='2');
+
+CREATE TABLE persons7
+(
+	first_name string,
+	last_name string,
+	nickname string
+)
+USING delta
+LOCATION 'dbfs:/user/hive/warehouse/erwindb.db/persons7'
+TBLPROPERTIES ('delta.minReaderVersion'='1','delta.minWriterVersion'='2');
+
+CREATE TABLE pets3
+(
+	name string,
+	owner_first_name string,
+	owner_last_name string
+)
+USING delta
+LOCATION 'dbfs:/user/hive/warehouse/pets3'
+TBLPROPERTIES ('delta.minReaderVersion'='1','delta.minWriterVersion'='2');
+
+CREATE TABLE qa1
+(
+	c tinyint
+)
+USING delta
+LOCATION 'dbfs:/user/hive/warehouse/qa1'
+TBLPROPERTIES ('delta.minReaderVersion'='1','delta.minWriterVersion'='2');
+
+CREATE TABLE qa2
+(
+	y tinyint,
+	c tinyint
+)
+USING delta
+LOCATION 'dbfs:/user/hive/warehouse/qa2'
+TBLPROPERTIES ('delta.minReaderVersion'='1','delta.minWriterVersion'='2');
+
+CREATE TABLE src_dept
+(
+	deptno int,
+	deptname string
+)
+USING delta
+LOCATION 'dbfs:/user/hive/warehouse/src_dept'
+TBLPROPERTIES ('delta.minReaderVersion'='1','delta.minWriterVersion'='2');
+
+CREATE TABLE src_dept1
+(
+	deptno int,
+	deptname string
+)
+USING delta
+LOCATION 'dbfs:/user/hive/warehouse/src_dept1'
+TBLPROPERTIES ('delta.minReaderVersion'='1','delta.minWriterVersion'='2');
+
+CREATE TABLE standardised_subscribe_dbo_scmmain_tmpvw
+(
+	Claim_Component_Reference varchar(250),
+	HashedBusinessKey varchar(250),
+	HashValue varchar(250),
+	lakeDeletedTimestamp varchar(250),
+	Lakelastupdatedate varchar(250),
+	Lakelastupdatetimestamp varchar(250),
+	lakevalidfromtimestamp varchar(250),
+	lakevalidtotimestamp varchar(250),
+	Loss_Narrative_1 varchar(250),
+	Loss_Narrative_2 varchar(250),
+	Loss_Narrative_3 varchar(250),
+	Trncgy varchar(250),
+	Trnid varchar(250)
+)
+USING delta
+LOCATION 'dbfs:/user/hive/warehouse/standardised_subscribe_dbo_scmmain_tmpvw'
+TBLPROPERTIES ('delta.minReaderVersion'='1','delta.minWriterVersion'='2');
+
+CREATE TABLE standardised_subscribe_dbo_scmmovt_tmpvw
+(
+	BPR varchar(250),
+	Claim_Component_Reference varchar(250),
+	Dttm varchar(250),
+	HashedBusinessKey bigint,
+	HashValue bigint,
+	lakelastupdatedate int,
+	lakelastupdatetimestamp varchar(250),
+	lakevalidfromtimestamp varchar(250),
+	lakevalidtotimestamp varchar(250),
+	Loss_Narrative_1 varchar(250),
+	Loss_Narrative_2 varchar(250),
+	Loss_Narrative_3 varchar(250),
+	Trncgy varchar(250),
+	Trnid varchar(250)
+)
+USING delta
+LOCATION 'dbfs:/user/hive/warehouse/standardised_subscribe_dbo_scmmovt_tmpvw'
+TBLPROPERTIES ('delta.minReaderVersion'='1','delta.minWriterVersion'='2');
+
+CREATE EXTERNAL TABLE student
+(
+	col1 int
+)
+USING CSV
+LOCATION 'dbfs:/mnt/csv_files';
+
+CREATE TABLE table10a
+(
+	table10a_col1 char(18),
+	table10a_col2 char(18)
+)
+USING delta
+LOCATION 'dbfs:/user/hive/warehouse/table10a'
+TBLPROPERTIES ('delta.minReaderVersion'='1','delta.minWriterVersion'='2');
+
+CREATE TABLE test1
+(
+	col1 int
+)
+USING delta
+LOCATION 'dbfs:/user/hive/warehouse/test1'
+TBLPROPERTIES ('delta.checkpoint.writeStatsAsJson'='false','delta.checkpoint.writeStatsAsStruct'='true','delta.minReaderVersion'='1','delta.minWriterVersion'='2');
+
+CREATE VIEW v_dba_db_links
+(
+	OWNER,
+	DB_LINK,
+	PORT,
+	HOST
+)
+TBLPROPERTIES (transient_lastDdlTime=1664432234)
+AS 
+SELECT dba_db_links.OWNER,dba_db_links.DB_LINK,dba_db_links.PORT,dba_db_links.HOST
+FROM dba_db_links ;
